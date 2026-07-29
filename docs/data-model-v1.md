@@ -31,6 +31,26 @@ Major fields:
 
 An institution has many users, academic structures, communications, library records, integrations, audit records, and analytics records. The `code` and, where required by policy, the `domain` should be unique.
 
+### institution_settings
+
+Stores institution-specific configuration so that institutional policies and preferences are not hard-coded in application code.
+
+Major fields:
+
+- `id`: Primary identifier.
+- `institution_id`: Owning institution; foreign key to `institutions`.
+- `setting_key`: Stable configuration key, unique within the institution.
+- `setting_value`: Stored configuration value, validated according to `value_type`.
+- `value_type`: Declared value type, which may support string, integer, decimal, boolean, JSON, date, or another validated type.
+- `description`: Human-readable explanation of the setting's purpose and expected use.
+- `is_public`: Whether the setting may be exposed without privileged authorization.
+- `created_at`: Record creation timestamp.
+- `updated_at`: Most recent modification timestamp.
+
+Each setting belongs to one institution, and `setting_key` must be unique within that institution. The `setting_value` must be validated according to its declared `value_type`. Sensitive secrets must not be stored as ordinary setting values; they must instead be held in a secure secret-management facility or represented by an encrypted credential reference.
+
+Examples include GPA scale, semester structure, time zone, attendance policy, chatbot access policy, branding preferences, and notification defaults. Institution settings improve configurability and institutional adaptability by allowing each institution to govern supported behaviour without requiring changes to application source code.
+
 ### users
 
 Represents the common account and authentication identity for a person using the platform.
@@ -117,6 +137,35 @@ Major fields include `id`, `institution_id`, `name`, `start_date`, `end_date`, `
 Represents a subdivision of an academic session.
 
 Major fields include `id`, `institution_id`, `academic_session_id`, `name`, `sequence_number`, `start_date`, `end_date`, `status`, `created_at`, and `updated_at`. A semester belongs to one academic session and has many course offerings. Its dates should fall within the parent session, and its sequence should be unique within that session.
+
+### academic_calendar_events
+
+Stores institution-specific academic and administrative events.
+
+Major fields:
+
+- `id`: Primary identifier.
+- `institution_id`: Owning institution; foreign key to `institutions`.
+- `academic_session_id`: Optional academic session associated with the event.
+- `semester_id`: Optional semester associated with the event.
+- `event_name`: Human-readable name of the event.
+- `event_type`: Controlled classification of the event.
+- `description`: Optional details about the event.
+- `start_at`: Date and time at which the event begins.
+- `end_at`: Date and time at which the event ends.
+- `target_scope`: Intended audience scope, such as institution-wide, faculty, department, or programme.
+- `faculty_id`: Optional targeted faculty.
+- `department_id`: Optional targeted department.
+- `programme_id`: Optional targeted programme.
+- `is_public`: Whether the event may be visible before authentication.
+- `status`: Lifecycle or publication state of the event.
+- `created_by_user_id`: User who created the event.
+- `created_at`: Record creation timestamp.
+- `updated_at`: Most recent modification timestamp.
+
+An event belongs to one institution and may optionally belong to an academic session or semester. Event types may include registration, examination, orientation, convocation, holiday, semester break, result publication, and institutional deadline. The `target_scope` determines whether the event is institution-wide or directed to a faculty, department, or programme, and the corresponding target reference should be required only where appropriate.
+
+The `start_at` value must not occur after `end_at`. All referenced academic entities, including any session, semester, faculty, department, or programme, must belong to the same institution as the event. Public events may be visible before authentication, while restricted events require authorization.
 
 ### students
 
@@ -303,6 +352,10 @@ Analytics records must avoid unnecessary personal data. Collection should apply 
 ## 10. Key Relationships
 
 - An institution has many users; each tenant-scoped user belongs to an institution.
+- An institution has many institution settings; each institution setting belongs to one institution.
+- An institution has many academic calendar events; each academic calendar event belongs to one institution.
+- An academic session has many academic calendar events; each event may optionally belong to an academic session.
+- A semester may have many academic calendar events; each event may optionally belong to a semester.
 - An institution has many faculties; each faculty belongs to one institution.
 - A faculty has many departments; each department belongs to one faculty.
 - A department has many programmes; each programme belongs to one department.
@@ -321,6 +374,7 @@ All tenant-owned relationships must preserve institutional consistency. A child 
 The first database migration will implement only:
 
 - `institutions`
+- `institution_settings`
 - `users`
 - `roles`
 - `user_roles`
@@ -332,6 +386,8 @@ The first database migration will implement only:
 
 This scope establishes the tenant boundary, identity and authorization foundation, the initial academic hierarchy, core student and lecturer profiles, and baseline auditability. The remaining entities in this conceptual model will be added incrementally through later migrations as their requirements, constraints, access patterns, privacy rules, and integration contracts are validated.
 
+The `academic_calendar_events` entity will be implemented during the academic module because it depends on academic sessions, semesters, faculties, departments, programmes, and users. It is therefore not included in the first migration.
+
 ## 12. Research Relevance
 
 The conceptual model provides a structured basis for evaluating the Ngozi Smart Campus platform as a research artefact:
@@ -341,6 +397,6 @@ The conceptual model provides a structured basis for evaluating the Ngozi Smart 
 - **Security:** Explicit tenant boundaries, role assignments, audit trails, authentication monitoring, and data-minimization rules support evaluation of access control, traceability, and institutional data protection.
 - **Usability:** Communication, notification, chatbot, feedback, and feature-usage entities provide evidence for assessing how effectively different user groups interact with platform services.
 - **Performance:** API logs, integration timing, response-time fields, usage aggregates, and performance metrics support measurement of latency, throughput, reliability, and resource behaviour.
-- **Institutional adaptability:** Configurable academic structures, tenant-specific integrations, flexible targeting, and institution-owned policies allow the model to be evaluated across institutions with different organisational and technological contexts.
+- **Institutional adaptability:** Configurable academic structures, tenant-specific integrations, flexible targeting, and institution-owned policies allow the model to be evaluated across institutions with different organisational and technological contexts. The `institution_settings` entity allows different universities to define their own policies and configuration without changing application source code.
 
 Together, these characteristics allow functional outcomes and quality attributes to be studied without conflating conceptual design with premature physical implementation.
