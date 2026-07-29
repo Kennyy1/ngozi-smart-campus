@@ -1,0 +1,4 @@
+Alembic migration environment for the Ngozi Smart Campus backend.
+
+Database connection settings are supplied by app.core.config.settings at
+runtime. Migration revisions belong in the versions directory.
