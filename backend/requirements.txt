@@ -1,2 +1,5 @@
 fastapi[standard]==0.140.1
 pytest==9.1.1
+sqlalchemy==2.0.51
+psycopg[binary]==3.3.4
+pydantic-settings==2.14.2
