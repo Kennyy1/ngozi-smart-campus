@@ -18,7 +18,10 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.audit_log import AuditLog
     from app.models.institution import Institution
+    from app.models.lecturer import Lecturer
+    from app.models.student import Student
     from app.models.user_role import UserRole
 
 
@@ -62,3 +65,12 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     role_assignments: Mapped[list[UserRole]] = relationship(
         back_populates="user",
     )
+    student_profile: Mapped[Student | None] = relationship(
+        back_populates="user",
+        uselist=False,
+    )
+    lecturer_profile: Mapped[Lecturer | None] = relationship(
+        back_populates="user",
+        uselist=False,
+    )
+    audit_logs: Mapped[list[AuditLog]] = relationship(back_populates="user")

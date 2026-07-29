@@ -5,9 +5,14 @@ from app.db.base import Base
 
 
 EXPECTED_TABLES = {
+    "audit_logs",
+    "departments",
+    "faculties",
     "institutions",
     "institution_settings",
+    "lecturers",
     "roles",
+    "students",
     "users",
     "user_roles",
 }
@@ -44,6 +49,20 @@ def test_expected_unique_constraints() -> None:
         "role_id",
         "institution_id",
     ) in _unique_column_sets("user_roles")
+    assert ("institution_id", "code") in _unique_column_sets("faculties")
+    assert ("institution_id", "name") in _unique_column_sets("faculties")
+    assert ("institution_id", "code") in _unique_column_sets("departments")
+    assert ("faculty_id", "name") in _unique_column_sets("departments")
+    assert (
+        "institution_id",
+        "matriculation_number",
+    ) in _unique_column_sets("students")
+    assert ("user_id",) in _unique_column_sets("students")
+    assert (
+        "institution_id",
+        "staff_number",
+    ) in _unique_column_sets("lecturers")
+    assert ("user_id",) in _unique_column_sets("lecturers")
 
 
 def test_expected_foreign_keys() -> None:
@@ -58,3 +77,37 @@ def test_expected_foreign_keys() -> None:
         _foreign_key_target("user_roles", "institution_id")
         == "institutions.id"
     )
+    assert (
+        _foreign_key_target("faculties", "institution_id") == "institutions.id"
+    )
+    assert (
+        _foreign_key_target("departments", "institution_id")
+        == "institutions.id"
+    )
+    assert (
+        _foreign_key_target("departments", "faculty_id") == "faculties.id"
+    )
+    assert (
+        _foreign_key_target("students", "institution_id") == "institutions.id"
+    )
+    assert _foreign_key_target("students", "user_id") == "users.id"
+    assert (
+        _foreign_key_target("lecturers", "institution_id") == "institutions.id"
+    )
+    assert _foreign_key_target("lecturers", "user_id") == "users.id"
+    assert (
+        _foreign_key_target("lecturers", "department_id") == "departments.id"
+    )
+    assert (
+        _foreign_key_target("audit_logs", "institution_id") == "institutions.id"
+    )
+    assert _foreign_key_target("audit_logs", "user_id") == "users.id"
+
+
+def test_deferred_programme_reference_and_audit_timestamps() -> None:
+    programme_id = Base.metadata.tables["students"].columns["programme_id"]
+    assert not programme_id.foreign_keys
+
+    audit_log_columns = Base.metadata.tables["audit_logs"].columns
+    assert "created_at" in audit_log_columns
+    assert "updated_at" not in audit_log_columns
