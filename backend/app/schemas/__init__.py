@@ -9,6 +9,18 @@ __all__ = [
     "LoginResponse",
     "TokenResponse",
 ]
+from app.schemas.department import (
+    DepartmentCreate,
+    DepartmentResponse,
+    DepartmentUpdate,
+)
 from app.schemas.faculty import FacultyCreate, FacultyResponse, FacultyUpdate
 
-__all__ = ["FacultyCreate", "FacultyResponse", "FacultyUpdate"]
+__all__ = [
+    "DepartmentCreate",
+    "DepartmentResponse",
+    "DepartmentUpdate",
+    "FacultyCreate",
+    "FacultyResponse",
+    "FacultyUpdate",
+]
