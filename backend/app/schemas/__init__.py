@@ -9,3 +9,6 @@ __all__ = [
     "LoginResponse",
     "TokenResponse",
 ]
+from app.schemas.faculty import FacultyCreate, FacultyResponse, FacultyUpdate
+
+__all__ = ["FacultyCreate", "FacultyResponse", "FacultyUpdate"]

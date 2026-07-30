@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from uuid import UUID as UUIDType
 
-from sqlalchemy import ForeignKey, String, Text, UniqueConstraint
+from sqlalchemy import CheckConstraint, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -27,6 +27,10 @@ class Faculty(UUIDPrimaryKeyMixin, TimestampMixin, Base):
             "institution_id",
             "name",
             name="uq_faculties_institution_name",
+        ),
+        CheckConstraint(
+            "status IN ('active', 'inactive')",
+            name="faculty_status",
         ),
     )
 
