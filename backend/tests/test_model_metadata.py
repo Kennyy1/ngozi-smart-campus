@@ -5,6 +5,7 @@ from app.db.base import Base
 
 
 EXPECTED_TABLES = {
+    "academic_sessions",
     "audit_logs",
     "departments",
     "faculties",
@@ -58,6 +59,10 @@ def test_expected_unique_constraints() -> None:
     assert ("department_id", "name") in _unique_column_sets("programmes")
     assert (
         "institution_id",
+        "name",
+    ) in _unique_column_sets("academic_sessions")
+    assert (
+        "institution_id",
         "matriculation_number",
     ) in _unique_column_sets("students")
     assert ("user_id",) in _unique_column_sets("students")
@@ -108,6 +113,10 @@ def test_expected_foreign_keys() -> None:
     assert _foreign_key_target("programmes", "faculty_id") == "faculties.id"
     assert (
         _foreign_key_target("programmes", "department_id") == "departments.id"
+    )
+    assert (
+        _foreign_key_target("academic_sessions", "institution_id")
+        == "institutions.id"
     )
     assert (
         _foreign_key_target("audit_logs", "institution_id") == "institutions.id"
