@@ -17,6 +17,7 @@ EXPECTED_TABLES = {
     "institution_settings",
     "institutions",
     "lecturers",
+    "programmes",
     "roles",
     "students",
     "user_roles",

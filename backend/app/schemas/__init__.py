@@ -15,6 +15,13 @@ from app.schemas.department import (
     DepartmentUpdate,
 )
 from app.schemas.faculty import FacultyCreate, FacultyResponse, FacultyUpdate
+from app.schemas.programme import (
+    ProgrammeAward,
+    ProgrammeCreate,
+    ProgrammeResponse,
+    ProgrammeUpdate,
+    StudyMode,
+)
 
 __all__ = [
     "DepartmentCreate",
@@ -23,4 +30,9 @@ __all__ = [
     "FacultyCreate",
     "FacultyResponse",
     "FacultyUpdate",
+    "ProgrammeAward",
+    "ProgrammeCreate",
+    "ProgrammeResponse",
+    "ProgrammeUpdate",
+    "StudyMode",
 ]

@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from app.models.faculty import Faculty
     from app.models.institution_setting import InstitutionSetting
     from app.models.lecturer import Lecturer
+    from app.models.programme import Programme
     from app.models.student import Student
     from app.models.user import User
     from app.models.user_role import UserRole
@@ -46,6 +47,9 @@ class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         back_populates="institution",
     )
     departments: Mapped[list[Department]] = relationship(
+        back_populates="institution",
+    )
+    programmes: Mapped[list[Programme]] = relationship(
         back_populates="institution",
     )
     students: Mapped[list[Student]] = relationship(
