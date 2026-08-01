@@ -1,3 +1,4 @@
+from app.models.academic_level import AcademicLevel
 from app.models.academic_session import AcademicSession
 from app.models.audit_log import AuditLog
 from app.models.department import Department
@@ -13,6 +14,7 @@ from app.models.user import User
 from app.models.user_role import UserRole
 
 __all__ = [
+    "AcademicLevel",
     "AcademicSession",
     "AuditLog",
     "Department",
