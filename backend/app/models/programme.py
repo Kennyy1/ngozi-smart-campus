@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from app.models.department import Department
     from app.models.faculty import Faculty
     from app.models.institution import Institution
+    from app.models.student import Student
 
 
 class Programme(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -92,3 +93,4 @@ class Programme(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         back_populates="programme",
     )
     courses: Mapped[list[Course]] = relationship(back_populates="programme")
+    students: Mapped[list[Student]] = relationship(back_populates="programme")

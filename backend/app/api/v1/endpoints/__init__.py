@@ -13,6 +13,7 @@ from app.api.v1.endpoints.departments import router as departments_router
 from app.api.v1.endpoints.faculties import router as faculties_router
 from app.api.v1.endpoints.programmes import router as programmes_router
 from app.api.v1.endpoints.semesters import router as semesters_router
+from app.api.v1.endpoints.students import router as students_router
 
 __all__ = [
     "academic_levels_router",
@@ -25,6 +26,7 @@ __all__ = [
     "faculties_router",
     "programmes_router",
     "semesters_router",
+    "students_router",
 ]
 from app.api.v1.endpoints.academic_levels import (
     router as academic_levels_router,

@@ -11,6 +11,7 @@ from app.api.v1.endpoints import (
     faculties_router,
     programmes_router,
     semesters_router,
+    students_router,
 )
 
 
@@ -25,3 +26,4 @@ api_router.include_router(semesters_router)
 api_router.include_router(faculties_router)
 api_router.include_router(departments_router)
 api_router.include_router(programmes_router)
+api_router.include_router(students_router)

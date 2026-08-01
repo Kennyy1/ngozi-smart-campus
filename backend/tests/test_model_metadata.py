@@ -187,9 +187,9 @@ def test_expected_foreign_keys() -> None:
     assert _foreign_key_target("audit_logs", "user_id") == "users.id"
 
 
-def test_deferred_programme_reference_and_audit_timestamps() -> None:
+def test_student_programme_reference_and_audit_timestamps() -> None:
     programme_id = Base.metadata.tables["students"].columns["programme_id"]
-    assert not programme_id.foreign_keys
+    assert next(iter(programme_id.foreign_keys)).target_fullname == "programmes.id"
 
     audit_log_columns = Base.metadata.tables["audit_logs"].columns
     assert "created_at" in audit_log_columns

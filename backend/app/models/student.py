@@ -14,6 +14,7 @@ from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 if TYPE_CHECKING:
     from app.models.course_registration import CourseRegistration
     from app.models.institution import Institution
+    from app.models.programme import Programme
     from app.models.user import User
 
 
@@ -40,9 +41,9 @@ class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         nullable=False,
         index=True,
     )
-    # A foreign key will be introduced when the programmes model is implemented.
     programme_id: Mapped[UUIDType | None] = mapped_column(
         UUID(as_uuid=True),
+        ForeignKey("programmes.id", ondelete="RESTRICT"),
         nullable=True,
         index=True,
     )
@@ -61,6 +62,7 @@ class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     institution: Mapped[Institution] = relationship(back_populates="students")
     user: Mapped[User] = relationship(back_populates="student_profile")
+    programme: Mapped[Programme | None] = relationship(back_populates="students")
     course_registrations: Mapped[list[CourseRegistration]] = relationship(
         back_populates="student",
     )
