@@ -8,6 +8,7 @@ EXPECTED_TABLES = {
     "academic_levels",
     "academic_sessions",
     "audit_logs",
+    "courses",
     "departments",
     "faculties",
     "institutions",
@@ -41,6 +42,12 @@ def test_all_models_are_registered() -> None:
 
 
 def test_expected_unique_constraints() -> None:
+    assert ("institution_id", "code") in _unique_column_sets("courses")
+    assert (
+        "programme_id",
+        "academic_level_id",
+        "title",
+    ) in _unique_column_sets("courses")
     assert ("programme_id", "name") in _unique_column_sets("academic_levels")
     assert ("programme_id", "code") in _unique_column_sets("academic_levels")
     assert (
@@ -84,6 +91,13 @@ def test_expected_unique_constraints() -> None:
 
 
 def test_expected_foreign_keys() -> None:
+    assert _foreign_key_target("courses", "institution_id") == "institutions.id"
+    assert _foreign_key_target("courses", "department_id") == "departments.id"
+    assert _foreign_key_target("courses", "programme_id") == "programmes.id"
+    assert (
+        _foreign_key_target("courses", "academic_level_id")
+        == "academic_levels.id"
+    )
     assert (
         _foreign_key_target("academic_levels", "institution_id")
         == "institutions.id"

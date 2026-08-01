@@ -14,6 +14,7 @@ EXPECTED_TABLES = {
     "academic_levels",
     "academic_sessions",
     "audit_logs",
+    "courses",
     "departments",
     "faculties",
     "institution_settings",

@@ -11,6 +11,7 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.course import Course
     from app.models.institution import Institution
     from app.models.programme import Programme
 
@@ -45,3 +46,4 @@ class AcademicLevel(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     institution: Mapped[Institution] = relationship(back_populates="academic_levels")
     programme: Mapped[Programme] = relationship(back_populates="academic_levels")
+    courses: Mapped[list[Course]] = relationship(back_populates="academic_level")

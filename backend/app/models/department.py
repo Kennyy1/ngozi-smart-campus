@@ -11,6 +11,7 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.course import Course
     from app.models.faculty import Faculty
     from app.models.institution import Institution
     from app.models.lecturer import Lecturer
@@ -67,3 +68,4 @@ class Department(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     programmes: Mapped[list[Programme]] = relationship(
         back_populates="department",
     )
+    courses: Mapped[list[Course]] = relationship(back_populates="department")
