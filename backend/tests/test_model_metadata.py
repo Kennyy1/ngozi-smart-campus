@@ -14,6 +14,7 @@ EXPECTED_TABLES = {
     "lecturers",
     "programmes",
     "roles",
+    "semesters",
     "students",
     "users",
     "user_roles",
@@ -61,6 +62,8 @@ def test_expected_unique_constraints() -> None:
         "institution_id",
         "name",
     ) in _unique_column_sets("academic_sessions")
+    assert ("academic_session_id", "name") in _unique_column_sets("semesters")
+    assert ("academic_session_id", "sequence_number") in _unique_column_sets("semesters")
     assert (
         "institution_id",
         "matriculation_number",
@@ -118,6 +121,8 @@ def test_expected_foreign_keys() -> None:
         _foreign_key_target("academic_sessions", "institution_id")
         == "institutions.id"
     )
+    assert _foreign_key_target("semesters", "institution_id") == "institutions.id"
+    assert _foreign_key_target("semesters", "academic_session_id") == "academic_sessions.id"
     assert (
         _foreign_key_target("audit_logs", "institution_id") == "institutions.id"
     )

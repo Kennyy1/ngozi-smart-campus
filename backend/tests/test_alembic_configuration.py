@@ -20,6 +20,7 @@ EXPECTED_TABLES = {
     "lecturers",
     "programmes",
     "roles",
+    "semesters",
     "students",
     "user_roles",
     "users",
