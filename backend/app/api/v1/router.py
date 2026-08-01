@@ -5,6 +5,7 @@ from app.api.v1.endpoints import (
     academic_sessions_router,
     auth_router,
     courses_router,
+    course_offerings_router,
     departments_router,
     faculties_router,
     programmes_router,
@@ -15,6 +16,7 @@ from app.api.v1.endpoints import (
 api_router = APIRouter()
 api_router.include_router(auth_router)
 api_router.include_router(courses_router)
+api_router.include_router(course_offerings_router)
 api_router.include_router(academic_levels_router)
 api_router.include_router(academic_sessions_router)
 api_router.include_router(semesters_router)
