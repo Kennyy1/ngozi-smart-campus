@@ -12,6 +12,7 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.course_registration import CourseRegistration
     from app.models.institution import Institution
     from app.models.user import User
 
@@ -60,3 +61,6 @@ class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     institution: Mapped[Institution] = relationship(back_populates="students")
     user: Mapped[User] = relationship(back_populates="student_profile")
+    course_registrations: Mapped[list[CourseRegistration]] = relationship(
+        back_populates="student",
+    )

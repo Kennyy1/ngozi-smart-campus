@@ -6,6 +6,7 @@ from app.api.v1.endpoints import (
     auth_router,
     courses_router,
     course_offerings_router,
+    course_registrations_router,
     departments_router,
     faculties_router,
     programmes_router,
@@ -17,6 +18,7 @@ api_router = APIRouter()
 api_router.include_router(auth_router)
 api_router.include_router(courses_router)
 api_router.include_router(course_offerings_router)
+api_router.include_router(course_registrations_router)
 api_router.include_router(academic_levels_router)
 api_router.include_router(academic_sessions_router)
 api_router.include_router(semesters_router)

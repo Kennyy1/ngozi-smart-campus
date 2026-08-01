@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from app.models.audit_log import AuditLog
     from app.models.course import Course
     from app.models.course_offering import CourseOffering
+    from app.models.course_registration import CourseRegistration
     from app.models.department import Department
     from app.models.faculty import Faculty
     from app.models.institution_setting import InstitutionSetting
@@ -66,6 +67,9 @@ class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     courses: Mapped[list[Course]] = relationship(back_populates="institution")
     course_offerings: Mapped[list[CourseOffering]] = relationship(
+        back_populates="institution",
+    )
+    course_registrations: Mapped[list[CourseRegistration]] = relationship(
         back_populates="institution",
     )
     students: Mapped[list[Student]] = relationship(

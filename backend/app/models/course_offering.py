@@ -14,6 +14,7 @@ from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 if TYPE_CHECKING:
     from app.models.academic_session import AcademicSession
     from app.models.course import Course
+    from app.models.course_registration import CourseRegistration
     from app.models.institution import Institution
     from app.models.semester import Semester
 
@@ -81,3 +82,6 @@ class CourseOffering(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     course: Mapped[Course] = relationship(back_populates="course_offerings")
     academic_session: Mapped[AcademicSession] = relationship(back_populates="course_offerings")
     semester: Mapped[Semester] = relationship(back_populates="course_offerings")
+    course_registrations: Mapped[list[CourseRegistration]] = relationship(
+        back_populates="course_offering",
+    )

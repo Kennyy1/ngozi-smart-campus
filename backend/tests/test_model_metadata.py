@@ -10,6 +10,7 @@ EXPECTED_TABLES = {
     "audit_logs",
     "courses",
     "course_offerings",
+    "course_registrations",
     "departments",
     "faculties",
     "institutions",
@@ -97,6 +98,18 @@ def test_expected_unique_constraints() -> None:
 
 
 def test_expected_foreign_keys() -> None:
+    assert (
+        _foreign_key_target("course_registrations", "institution_id")
+        == "institutions.id"
+    )
+    assert (
+        _foreign_key_target("course_registrations", "student_id")
+        == "students.id"
+    )
+    assert (
+        _foreign_key_target("course_registrations", "course_offering_id")
+        == "course_offerings.id"
+    )
     assert (
         _foreign_key_target("course_offerings", "institution_id")
         == "institutions.id"
