@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import TYPE_CHECKING
 from uuid import UUID as UUIDType
 
-from sqlalchemy import ForeignKey, String, UniqueConstraint
+from sqlalchemy import Date, ForeignKey, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -50,6 +51,7 @@ class Lecturer(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         String(100),
         nullable=True,
     )
+    academic_rank: Mapped[str] = mapped_column(String(30), nullable=False)
     employment_status: Mapped[str] = mapped_column(
         String(30),
         nullable=False,
@@ -59,6 +61,8 @@ class Lecturer(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         String(255),
         nullable=True,
     )
+    employment_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    office_location: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     institution: Mapped[Institution] = relationship(back_populates="lecturers")
     user: Mapped[User] = relationship(back_populates="lecturer_profile")
