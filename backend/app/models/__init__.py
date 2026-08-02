@@ -9,6 +9,7 @@ from app.models.faculty import Faculty
 from app.models.institution import Institution
 from app.models.institution_setting import InstitutionSetting
 from app.models.lecturer import Lecturer
+from app.models.lecturer_assignment import LecturerAssignment
 from app.models.programme import Programme
 from app.models.role import Role
 from app.models.semester import Semester
@@ -28,6 +29,7 @@ __all__ = [
     "Institution",
     "InstitutionSetting",
     "Lecturer",
+    "LecturerAssignment",
     "Programme",
     "Role",
     "Semester",
