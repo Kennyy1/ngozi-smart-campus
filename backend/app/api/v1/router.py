@@ -7,6 +7,7 @@ from app.api.v1.endpoints import (
     courses_router,
     course_offerings_router,
     course_registrations_router,
+    class_sessions_router,
     departments_router,
     faculties_router,
     lecturers_router,
@@ -22,6 +23,7 @@ api_router.include_router(auth_router)
 api_router.include_router(courses_router)
 api_router.include_router(course_offerings_router)
 api_router.include_router(course_registrations_router)
+api_router.include_router(class_sessions_router)
 api_router.include_router(academic_levels_router)
 api_router.include_router(academic_sessions_router)
 api_router.include_router(semesters_router)
