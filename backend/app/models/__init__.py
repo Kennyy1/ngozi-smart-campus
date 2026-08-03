@@ -1,6 +1,7 @@
 from app.models.academic_level import AcademicLevel
 from app.models.academic_session import AcademicSession
 from app.models.audit_log import AuditLog
+from app.models.attendance_record import AttendanceRecord
 from app.models.course import Course
 from app.models.class_session import ClassSession
 from app.models.course_offering import CourseOffering
@@ -22,6 +23,7 @@ __all__ = [
     "AcademicLevel",
     "AcademicSession",
     "AuditLog",
+    "AttendanceRecord",
     "Course",
     "ClassSession",
     "CourseOffering",

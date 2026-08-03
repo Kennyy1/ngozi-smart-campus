@@ -9,6 +9,7 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.attendance_record import AttendanceRecord
     from app.models.class_session import ClassSession
     from app.models.academic_level import AcademicLevel
     from app.models.academic_session import AcademicSession
@@ -82,6 +83,7 @@ class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     lecturer_assignments: Mapped[list[LecturerAssignment]] = relationship(back_populates="institution")
     class_sessions: Mapped[list[ClassSession]] = relationship(back_populates="institution")
+    attendance_records: Mapped[list[AttendanceRecord]] = relationship(back_populates="institution")
     audit_logs: Mapped[list[AuditLog]] = relationship(
         back_populates="institution",
     )

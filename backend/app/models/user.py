@@ -18,6 +18,7 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.attendance_record import AttendanceRecord
     from app.models.audit_log import AuditLog
     from app.models.institution import Institution
     from app.models.lecturer import Lecturer
@@ -74,3 +75,4 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         uselist=False,
     )
     audit_logs: Mapped[list[AuditLog]] = relationship(back_populates="user")
+    recorded_attendance_records: Mapped[list[AttendanceRecord]] = relationship(back_populates="recorded_by_user")
