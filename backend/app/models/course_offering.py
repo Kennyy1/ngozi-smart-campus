@@ -12,6 +12,7 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.assessment_component import AssessmentComponent
     from app.models.class_session import ClassSession
     from app.models.academic_session import AcademicSession
     from app.models.course import Course
@@ -89,3 +90,4 @@ class CourseOffering(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     )
     lecturer_assignments: Mapped[list[LecturerAssignment]] = relationship(back_populates="course_offering")
     class_sessions: Mapped[list[ClassSession]] = relationship(back_populates="course_offering")
+    assessment_components: Mapped[list[AssessmentComponent]] = relationship(back_populates="course_offering")

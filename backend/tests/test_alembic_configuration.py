@@ -11,6 +11,7 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 ALEMBIC_INI = BACKEND_ROOT / "alembic.ini"
 ALEMBIC_DIRECTORY = BACKEND_ROOT / "alembic"
 EXPECTED_TABLES = {
+    "assessment_components",
     "attendance_records",
     "class_sessions",
     "academic_levels",
