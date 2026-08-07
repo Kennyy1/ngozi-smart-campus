@@ -12,6 +12,7 @@ ALEMBIC_INI = BACKEND_ROOT / "alembic.ini"
 ALEMBIC_DIRECTORY = BACKEND_ROOT / "alembic"
 EXPECTED_TABLES = {
     "assessment_components",
+    "assessment_scores",
     "attendance_records",
     "class_sessions",
     "academic_levels",
