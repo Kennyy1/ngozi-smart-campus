@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from app.api.v1.endpoints import (
     assessment_components_router,
     assessment_scores_router,
+    examinations_router,
     academic_levels_router,
     academic_sessions_router,
     attendance_records_router,
@@ -25,6 +26,7 @@ from app.api.v1.endpoints import (
 api_router = APIRouter()
 api_router.include_router(assessment_components_router)
 api_router.include_router(assessment_scores_router)
+api_router.include_router(examinations_router)
 api_router.include_router(auth_router)
 api_router.include_router(attendance_records_router)
 api_router.include_router(attendance_analytics_router)

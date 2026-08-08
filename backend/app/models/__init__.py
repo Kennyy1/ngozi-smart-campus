@@ -10,6 +10,7 @@ from app.models.course_offering import CourseOffering
 from app.models.course_registration import CourseRegistration
 from app.models.department import Department
 from app.models.faculty import Faculty
+from app.models.examination import Examination
 from app.models.institution import Institution
 from app.models.institution_setting import InstitutionSetting
 from app.models.lecturer import Lecturer
@@ -34,6 +35,7 @@ __all__ = [
     "CourseRegistration",
     "Department",
     "Faculty",
+    "Examination",
     "Institution",
     "InstitutionSetting",
     "Lecturer",

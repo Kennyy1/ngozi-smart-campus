@@ -21,10 +21,12 @@ from app.api.v1.endpoints.semesters import router as semesters_router
 from app.api.v1.endpoints.students import router as students_router
 from app.api.v1.endpoints.assessment_components import router as assessment_components_router
 from app.api.v1.endpoints.assessment_scores import router as assessment_scores_router
+from app.api.v1.endpoints.examinations import router as examinations_router
 
 __all__ = [
     "assessment_components_router",
     "assessment_scores_router",
+    "examinations_router",
     "academic_levels_router",
     "academic_sessions_router",
     "auth_router",

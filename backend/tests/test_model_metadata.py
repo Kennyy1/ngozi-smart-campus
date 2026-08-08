@@ -17,6 +17,7 @@ EXPECTED_TABLES = {
     "course_registrations",
     "departments",
     "faculties",
+    "examinations",
     "institutions",
     "institution_settings",
     "lecturers",
