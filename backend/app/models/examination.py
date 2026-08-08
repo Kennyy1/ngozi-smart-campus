@@ -13,6 +13,7 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.examination_score import ExaminationScore
     from app.models.course_offering import CourseOffering
     from app.models.institution import Institution
     from app.models.lecturer_assignment import LecturerAssignment
@@ -48,3 +49,4 @@ class Examination(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     institution: Mapped[Institution] = relationship(back_populates="examinations")
     course_offering: Mapped[CourseOffering] = relationship(back_populates="examinations")
     lecturer_assignment: Mapped[LecturerAssignment] = relationship(back_populates="examinations")
+    examination_scores: Mapped[list[ExaminationScore]] = relationship(back_populates="examination")

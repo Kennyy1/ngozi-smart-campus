@@ -19,6 +19,7 @@ from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
     from app.models.assessment_score import AssessmentScore
+    from app.models.examination_score import ExaminationScore
     from app.models.attendance_record import AttendanceRecord
     from app.models.audit_log import AuditLog
     from app.models.institution import Institution
@@ -78,3 +79,4 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     audit_logs: Mapped[list[AuditLog]] = relationship(back_populates="user")
     recorded_attendance_records: Mapped[list[AttendanceRecord]] = relationship(back_populates="recorded_by_user")
     graded_assessment_scores: Mapped[list[AssessmentScore]] = relationship(back_populates="graded_by_user")
+    graded_examination_scores: Mapped[list[ExaminationScore]] = relationship(back_populates="graded_by_user")

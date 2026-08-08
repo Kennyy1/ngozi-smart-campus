@@ -18,6 +18,7 @@ EXPECTED_TABLES = {
     "departments",
     "faculties",
     "examinations",
+    "examination_scores",
     "institutions",
     "institution_settings",
     "lecturers",
