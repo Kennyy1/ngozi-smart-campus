@@ -22,6 +22,7 @@ from app.api.v1.endpoints import (
     semesters_router,
     students_router,
     result_computation_router,
+    results_router,
 )
 
 
@@ -31,6 +32,7 @@ api_router.include_router(assessment_scores_router)
 api_router.include_router(examinations_router)
 api_router.include_router(examination_scores_router)
 api_router.include_router(result_computation_router)
+api_router.include_router(results_router)
 api_router.include_router(auth_router)
 api_router.include_router(attendance_records_router)
 api_router.include_router(attendance_analytics_router)

@@ -31,6 +31,7 @@ if TYPE_CHECKING:
     from app.models.user_role import UserRole
     from app.models.examination import Examination
     from app.models.examination_score import ExaminationScore
+    from app.models.result import Result
 
 
 class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -92,6 +93,7 @@ class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     assessment_scores: Mapped[list[AssessmentScore]] = relationship(back_populates="institution")
     examinations: Mapped[list[Examination]] = relationship(back_populates="institution")
     examination_scores: Mapped[list[ExaminationScore]] = relationship(back_populates="institution")
+    results: Mapped[list[Result]] = relationship(back_populates="institution")
     audit_logs: Mapped[list[AuditLog]] = relationship(
         back_populates="institution",
     )

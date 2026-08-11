@@ -22,6 +22,7 @@ from app.models.semester import Semester
 from app.models.student import Student
 from app.models.user import User
 from app.models.user_role import UserRole
+from app.models.result import Result
 
 __all__ = [
     "AcademicLevel",
@@ -48,4 +49,5 @@ __all__ = [
     "Student",
     "User",
     "UserRole",
+    "Result",
 ]

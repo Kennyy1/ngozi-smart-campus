@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from app.models.course_offering import CourseOffering
     from app.models.institution import Institution
     from app.models.student import Student
+    from app.models.result import Result
 
 
 class CourseRegistration(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -83,3 +84,4 @@ class CourseRegistration(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     attendance_records: Mapped[list[AttendanceRecord]] = relationship(back_populates="course_registration")
     assessment_scores: Mapped[list[AssessmentScore]] = relationship(back_populates="course_registration")
     examination_scores: Mapped[list[ExaminationScore]] = relationship(back_populates="course_registration")
+    results: Mapped[list[Result]] = relationship(back_populates="course_registration")

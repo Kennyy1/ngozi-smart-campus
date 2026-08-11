@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from app.models.lecturer_assignment import LecturerAssignment
     from app.models.examination import Examination
     from app.models.semester import Semester
+    from app.models.result import Result
 
 
 class CourseOffering(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -93,3 +94,4 @@ class CourseOffering(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     class_sessions: Mapped[list[ClassSession]] = relationship(back_populates="course_offering")
     assessment_components: Mapped[list[AssessmentComponent]] = relationship(back_populates="course_offering")
     examinations: Mapped[list[Examination]] = relationship(back_populates="course_offering")
+    results: Mapped[list[Result]] = relationship(back_populates="course_offering")
