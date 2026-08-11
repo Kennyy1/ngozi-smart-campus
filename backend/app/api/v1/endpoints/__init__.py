@@ -23,12 +23,14 @@ from app.api.v1.endpoints.assessment_components import router as assessment_comp
 from app.api.v1.endpoints.assessment_scores import router as assessment_scores_router
 from app.api.v1.endpoints.examinations import router as examinations_router
 from app.api.v1.endpoints.examination_scores import router as examination_scores_router
+from app.api.v1.endpoints.result_computation import router as result_computation_router
 
 __all__ = [
     "assessment_components_router",
     "assessment_scores_router",
     "examinations_router",
     "examination_scores_router",
+    "result_computation_router",
     "academic_levels_router",
     "academic_sessions_router",
     "auth_router",
