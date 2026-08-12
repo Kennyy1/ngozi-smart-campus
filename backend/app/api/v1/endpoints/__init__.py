@@ -30,6 +30,7 @@ from app.api.v1.endpoints.academic_progression import router as academic_progres
 from app.api.v1.endpoints.transcripts import router as transcripts_router
 from app.api.v1.endpoints.official_transcripts import router as official_transcripts_router
 from app.api.v1.endpoints.graduation_eligibility import router as graduation_eligibility_router
+from app.api.v1.endpoints.degree_classification import router as degree_classification_router
 
 __all__ = [
     "assessment_components_router",
@@ -43,6 +44,7 @@ __all__ = [
     "transcripts_router",
     "official_transcripts_router",
     "graduation_eligibility_router",
+    "degree_classification_router",
     "academic_levels_router",
     "academic_sessions_router",
     "auth_router",
