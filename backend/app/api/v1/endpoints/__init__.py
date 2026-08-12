@@ -25,6 +25,7 @@ from app.api.v1.endpoints.examinations import router as examinations_router
 from app.api.v1.endpoints.examination_scores import router as examination_scores_router
 from app.api.v1.endpoints.result_computation import router as result_computation_router
 from app.api.v1.endpoints.results import router as results_router
+from app.api.v1.endpoints.academic_performance import router as academic_performance_router
 
 __all__ = [
     "assessment_components_router",
@@ -33,6 +34,7 @@ __all__ = [
     "examination_scores_router",
     "result_computation_router",
     "results_router",
+    "academic_performance_router",
     "academic_levels_router",
     "academic_sessions_router",
     "auth_router",
