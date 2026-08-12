@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from app.models.programme import Programme
     from app.models.user import User
     from app.models.result import Result
+    from app.models.official_transcript import OfficialTranscript
 
 
 class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -68,3 +69,4 @@ class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         back_populates="student",
     )
     results: Mapped[list[Result]] = relationship(back_populates="student")
+    official_transcripts: Mapped[list[OfficialTranscript]] = relationship(back_populates="student")

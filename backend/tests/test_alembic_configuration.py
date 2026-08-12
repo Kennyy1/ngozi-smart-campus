@@ -27,6 +27,7 @@ EXPECTED_TABLES = {
     "examination_scores",
     "institution_settings",
     "institutions",
+    "official_transcripts",
     "lecturers",
     "lecturer_assignments",
     "programmes",

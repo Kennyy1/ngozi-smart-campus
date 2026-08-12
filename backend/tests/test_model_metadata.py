@@ -21,6 +21,7 @@ EXPECTED_TABLES = {
     "examination_scores",
     "institutions",
     "institution_settings",
+    "official_transcripts",
     "lecturers",
     "lecturer_assignments",
     "programmes",
@@ -52,6 +53,7 @@ def test_all_models_are_registered() -> None:
 
 
 def test_expected_unique_constraints() -> None:
+    assert ("institution_id", "transcript_reference") in _unique_column_sets("official_transcripts")
     assert (
         "course_id",
         "academic_session_id",
@@ -106,6 +108,12 @@ def test_expected_unique_constraints() -> None:
 
 
 def test_expected_foreign_keys() -> None:
+    assert _foreign_key_target("official_transcripts", "institution_id") == "institutions.id"
+    assert _foreign_key_target("official_transcripts", "student_id") == "students.id"
+    assert _foreign_key_target("official_transcripts", "programme_id") == "programmes.id"
+    assert _foreign_key_target("official_transcripts", "generated_by_user_id") == "users.id"
+    assert _foreign_key_target("official_transcripts", "issued_by_user_id") == "users.id"
+    assert _foreign_key_target("official_transcripts", "revoked_by_user_id") == "users.id"
     assert _foreign_key_target("assessment_scores", "institution_id") == "institutions.id"
     assert _foreign_key_target("assessment_scores", "assessment_component_id") == "assessment_components.id"
     assert _foreign_key_target("assessment_scores", "course_registration_id") == "course_registrations.id"
