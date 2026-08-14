@@ -23,6 +23,7 @@ EXPECTED_TABLES = {
     "institution_settings",
     "official_transcripts",
     "graduation_records",
+    "academic_documents",
     "lecturers",
     "lecturer_assignments",
     "programmes",
@@ -54,6 +55,8 @@ def test_all_models_are_registered() -> None:
 
 
 def test_expected_unique_constraints() -> None:
+    assert ("document_reference",) in _unique_column_sets("academic_documents")
+    assert ("verification_code",) in _unique_column_sets("academic_documents")
     assert ("graduation_reference",) in _unique_column_sets("graduation_records")
     assert ("institution_id", "transcript_reference") in _unique_column_sets("official_transcripts")
     assert (
@@ -110,6 +113,14 @@ def test_expected_unique_constraints() -> None:
 
 
 def test_expected_foreign_keys() -> None:
+    assert _foreign_key_target("academic_documents", "institution_id") == "institutions.id"
+    assert _foreign_key_target("academic_documents", "student_id") == "students.id"
+    assert _foreign_key_target("academic_documents", "programme_id") == "programmes.id"
+    assert _foreign_key_target("academic_documents", "graduation_record_id") == "graduation_records.id"
+    assert _foreign_key_target("academic_documents", "official_transcript_id") == "official_transcripts.id"
+    assert _foreign_key_target("academic_documents", "generated_by_user_id") == "users.id"
+    assert _foreign_key_target("academic_documents", "issued_by_user_id") == "users.id"
+    assert _foreign_key_target("academic_documents", "revoked_by_user_id") == "users.id"
     assert _foreign_key_target("graduation_records", "institution_id") == "institutions.id"
     assert _foreign_key_target("graduation_records", "student_id") == "students.id"
     assert _foreign_key_target("graduation_records", "programme_id") == "programmes.id"

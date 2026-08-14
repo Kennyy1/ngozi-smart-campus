@@ -13,6 +13,7 @@ from app.db.base import Base
 from app.models.mixins import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from app.models.academic_document import AcademicDocument
     from app.models.institution import Institution
     from app.models.programme import Programme
     from app.models.student import Student
@@ -56,3 +57,4 @@ class GraduationRecord(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     prepared_by_user: Mapped[User] = relationship(foreign_keys=[prepared_by_user_id])
     confirmed_by_user: Mapped[User | None] = relationship(foreign_keys=[confirmed_by_user_id])
     revoked_by_user: Mapped[User | None] = relationship(foreign_keys=[revoked_by_user_id])
+    academic_documents: Mapped[list[AcademicDocument]] = relationship(back_populates="graduation_record")

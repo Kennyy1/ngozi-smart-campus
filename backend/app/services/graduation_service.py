@@ -205,7 +205,31 @@ def _generate_graduation_reference(session: Session, *, now: datetime) -> str:
 
 
 def _derive_award_title(programme: Programme) -> str:
-    return f"{programme.award.strip()} in {programme.name.strip()}"
+    name = (programme.name or "").strip()
+    award = (programme.award or "").strip()
+    if not name:
+        if award:
+            return award
+        raise ValueError("Programme name and award cannot both be blank")
+
+    normalized_name = " ".join(name.casefold().split())
+    complete_title_prefixes = (
+        "bachelor ",
+        "master ",
+        "doctor ",
+        "postgraduate diploma",
+    )
+    if normalized_name.startswith(complete_title_prefixes):
+        return name
+
+    normalized_award = "".join(award.casefold().split()).replace(".", "")
+    short_awards = {"bsc", "ba", "beng", "msc", "ma", "mba", "pgd", "mphil", "phd"}
+    if normalized_award in short_awards:
+        if normalized_name.startswith(normalized_award):
+            return name
+        return f"{award} in {name}"
+
+    return name
 
 
 def _serialize_snapshot(snapshot: GraduationEligibilityEvaluation | GraduationOutcomeEvaluation) -> dict[str, object]:

@@ -25,6 +25,7 @@ from app.models.user_role import UserRole
 from app.models.result import Result
 from app.models.official_transcript import OfficialTranscript
 from app.models.graduation_record import GraduationRecord
+from app.models.academic_document import AcademicDocument
 
 __all__ = [
     "AcademicLevel",
@@ -54,4 +55,5 @@ __all__ = [
     "Result",
     "OfficialTranscript",
     "GraduationRecord",
+    "AcademicDocument",
 ]

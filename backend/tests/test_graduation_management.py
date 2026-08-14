@@ -115,6 +115,37 @@ def test_create_eligible_draft_derives_everything_and_commits_once(monkeypatch):
     assert calls == {"eligibility": 1, "outcome": 1} and db.commits == 1 and db.added == [result]
 
 
+@pytest.mark.parametrize(
+    ("award", "name", "expected"),
+    [
+        ("BSc", "Bachelor of Science in Computing and Informatics", "Bachelor of Science in Computing and Informatics"),
+        ("BSc", "Computer Science", "BSc in Computer Science"),
+        ("", "Bachelor of Science in Computing and Informatics", "Bachelor of Science in Computing and Informatics"),
+        (None, "  Master of Science in Computer Science  ", "Master of Science in Computer Science"),
+    ],
+)
+def test_award_title_derivation_avoids_duplicate_degree_wording(award, name, expected):
+    _, programme = context()
+    programme.award = award
+    programme.name = name
+    assert service._derive_award_title(programme) == expected
+
+
+def test_draft_refresh_stably_derives_complete_award_title(monkeypatch):
+    student, programme = context()
+    programme.name = "Bachelor of Science in Computing and Informatics"
+    item = record(student, programme)
+    item.award_title = "stale title"
+    patch_evaluations(monkeypatch, student, programme)
+
+    refreshed = service.refresh_graduation_record(
+        Session(item, programme), institution_id=item.institution_id,
+        graduation_id=item.id, user_id=uuid4(),
+    )  # type: ignore[arg-type]
+
+    assert refreshed.award_title == "Bachelor of Science in Computing and Informatics"
+
+
 def test_ineligible_and_duplicate_creation_are_rejected(monkeypatch):
     student, programme = context(); patch_evaluations(monkeypatch, student, programme, eligible=False)
     with pytest.raises(service.GraduationStudentIneligibleError):
@@ -157,11 +188,12 @@ def test_confirm_revalidates_atomically_and_revoke_restores_exact_state(monkeypa
     assert confirmed.graduation_date == date(2026, 7, 1) and student.enrollment_status == "graduated" and student.graduation_date == date(2026, 7, 1)
     assert confirmed.previous_student_enrollment_status == "active" and confirmed.previous_student_graduation_date == date(2020, 1, 1)
     assert calls == {"eligibility": 1, "outcome": 1} and db.commits == 1
-    snapshot_at_confirmation = dict(item.outcome_snapshot); actor2 = uuid4()
+    snapshot_at_confirmation = dict(item.outcome_snapshot); award_title_at_confirmation = item.award_title; actor2 = uuid4()
     revoked = service.revoke_graduation(Session(item, student), institution_id=item.institution_id, graduation_id=item.id, user_id=actor2, request=GraduationRecordRevoke(reason="Invalid award"))  # type: ignore[arg-type]
     assert revoked.status == "revoked" and revoked.revocation_reason == "Invalid award" and revoked.revoked_at and revoked.revoked_by_user_id == actor2
     assert student.enrollment_status == "active" and student.graduation_date == date(2020, 1, 1)
     assert revoked.outcome_snapshot == snapshot_at_confirmation
+    assert revoked.award_title == award_title_at_confirmation
     assert original_snapshot["student_id"] == snapshot_at_confirmation["student_id"]
 
 

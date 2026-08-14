@@ -26,6 +26,7 @@ if TYPE_CHECKING:
     from app.models.student import Student
     from app.models.official_transcript import OfficialTranscript
     from app.models.graduation_record import GraduationRecord
+    from app.models.academic_document import AcademicDocument
 
 
 class Programme(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -98,3 +99,4 @@ class Programme(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     students: Mapped[list[Student]] = relationship(back_populates="programme")
     official_transcripts: Mapped[list[OfficialTranscript]] = relationship(back_populates="programme")
     graduation_records: Mapped[list[GraduationRecord]] = relationship(back_populates="programme")
+    academic_documents: Mapped[list[AcademicDocument]] = relationship(back_populates="programme")
