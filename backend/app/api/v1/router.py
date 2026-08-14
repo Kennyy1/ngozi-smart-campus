@@ -29,6 +29,7 @@ from app.api.v1.endpoints import (
     official_transcripts_router,
     graduation_eligibility_router,
     degree_classification_router,
+    graduations_router,
 )
 
 
@@ -45,6 +46,7 @@ api_router.include_router(transcripts_router)
 api_router.include_router(official_transcripts_router)
 api_router.include_router(graduation_eligibility_router)
 api_router.include_router(degree_classification_router)
+api_router.include_router(graduations_router)
 api_router.include_router(auth_router)
 api_router.include_router(attendance_records_router)
 api_router.include_router(attendance_analytics_router)

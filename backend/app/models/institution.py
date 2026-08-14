@@ -33,6 +33,7 @@ if TYPE_CHECKING:
     from app.models.examination_score import ExaminationScore
     from app.models.result import Result
     from app.models.official_transcript import OfficialTranscript
+    from app.models.graduation_record import GraduationRecord
 
 
 class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -96,6 +97,7 @@ class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     examination_scores: Mapped[list[ExaminationScore]] = relationship(back_populates="institution")
     results: Mapped[list[Result]] = relationship(back_populates="institution")
     official_transcripts: Mapped[list[OfficialTranscript]] = relationship(back_populates="institution")
+    graduation_records: Mapped[list[GraduationRecord]] = relationship(back_populates="institution")
     audit_logs: Mapped[list[AuditLog]] = relationship(
         back_populates="institution",
     )
