@@ -33,6 +33,8 @@ from app.api.v1.endpoints.graduation_eligibility import router as graduation_eli
 from app.api.v1.endpoints.degree_classification import router as degree_classification_router
 from app.api.v1.endpoints.graduations import router as graduations_router
 from app.api.v1.endpoints.academic_documents import router as academic_documents_router, public_router as public_academic_documents_router
+from app.api.v1.endpoints.clearance_requirements import router as clearance_requirements_router
+from app.api.v1.endpoints.student_clearances import router as student_clearances_router, student_router as student_clearance_students_router
 
 __all__ = [
     "assessment_components_router",
@@ -50,6 +52,9 @@ __all__ = [
     "graduations_router",
     "academic_documents_router",
     "public_academic_documents_router",
+    "clearance_requirements_router",
+    "student_clearances_router",
+    "student_clearance_students_router",
     "academic_levels_router",
     "academic_sessions_router",
     "auth_router",

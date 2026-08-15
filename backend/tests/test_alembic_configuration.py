@@ -30,6 +30,8 @@ EXPECTED_TABLES = {
     "official_transcripts",
     "graduation_records",
     "academic_documents",
+    "clearance_requirements",
+    "student_clearances",
     "lecturers",
     "lecturer_assignments",
     "programmes",

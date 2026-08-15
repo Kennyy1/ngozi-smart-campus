@@ -26,6 +26,8 @@ from app.models.result import Result
 from app.models.official_transcript import OfficialTranscript
 from app.models.graduation_record import GraduationRecord
 from app.models.academic_document import AcademicDocument
+from app.models.clearance_requirement import ClearanceRequirement
+from app.models.student_clearance import StudentClearance
 
 __all__ = [
     "AcademicLevel",
@@ -56,4 +58,6 @@ __all__ = [
     "OfficialTranscript",
     "GraduationRecord",
     "AcademicDocument",
+    "ClearanceRequirement",
+    "StudentClearance",
 ]

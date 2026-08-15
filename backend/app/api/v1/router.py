@@ -32,6 +32,9 @@ from app.api.v1.endpoints import (
     graduations_router,
     academic_documents_router,
     public_academic_documents_router,
+    clearance_requirements_router,
+    student_clearances_router,
+    student_clearance_students_router,
 )
 
 
@@ -51,6 +54,9 @@ api_router.include_router(degree_classification_router)
 api_router.include_router(graduations_router)
 api_router.include_router(academic_documents_router)
 api_router.include_router(public_academic_documents_router)
+api_router.include_router(clearance_requirements_router)
+api_router.include_router(student_clearances_router)
+api_router.include_router(student_clearance_students_router)
 api_router.include_router(auth_router)
 api_router.include_router(attendance_records_router)
 api_router.include_router(attendance_analytics_router)
