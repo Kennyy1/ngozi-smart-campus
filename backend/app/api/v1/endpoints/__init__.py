@@ -75,3 +75,8 @@ __all__ = [
 from app.api.v1.endpoints.academic_levels import (
     router as academic_levels_router,
 )
+from app.api.v1.endpoints.student_portal import router as student_portal_router
+from app.api.v1.endpoints.lecturer_portal import router as lecturer_portal_router
+from app.api.v1.endpoints.admin_portal import router as admin_portal_router
+
+__all__ += ["student_portal_router", "lecturer_portal_router", "admin_portal_router"]

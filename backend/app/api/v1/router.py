@@ -35,10 +35,16 @@ from app.api.v1.endpoints import (
     clearance_requirements_router,
     student_clearances_router,
     student_clearance_students_router,
+    student_portal_router,
+    lecturer_portal_router,
+    admin_portal_router,
 )
 
 
 api_router = APIRouter()
+api_router.include_router(student_portal_router)
+api_router.include_router(lecturer_portal_router)
+api_router.include_router(admin_portal_router)
 api_router.include_router(assessment_components_router)
 api_router.include_router(assessment_scores_router)
 api_router.include_router(examinations_router)

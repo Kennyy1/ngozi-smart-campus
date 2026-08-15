@@ -5,7 +5,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING, Any
 from uuid import UUID as UUIDType
 
-from sqlalchemy import CheckConstraint, Date, DateTime, ForeignKey, Numeric, String, Text, UniqueConstraint
+from sqlalchemy import CheckConstraint, Date, DateTime, ForeignKey, Index, Numeric, String, Text, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -25,6 +25,14 @@ class GraduationRecord(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __table_args__ = (
         UniqueConstraint("graduation_reference", name="uq_graduation_records_reference"),
         CheckConstraint("status IN ('draft', 'confirmed', 'revoked', 'inactive')", name="graduation_record_status"),
+        Index(
+            "uq_graduation_records_active_student_programme",
+            "institution_id",
+            "student_id",
+            "programme_id",
+            unique=True,
+            postgresql_where=text("status IN ('draft', 'confirmed')"),
+        ),
     )
 
     institution_id: Mapped[UUIDType] = mapped_column(UUID(as_uuid=True), ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False, index=True)

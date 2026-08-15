@@ -5,6 +5,7 @@ from uuid import uuid4
 import pytest
 from fastapi import HTTPException
 from pydantic import ValidationError
+from sqlalchemy import Index
 
 from app.api import dependencies
 from app.api.v1.endpoints import graduations
@@ -43,6 +44,26 @@ def context():
     student = Student(id=uuid4(), institution_id=institution_id, user_id=uuid4(), programme_id=programme_id, matriculation_number="NSC/1", admission_year=2022, current_level="Final Year", enrollment_status="active")
     programme = Programme(id=programme_id, institution_id=institution_id, faculty_id=uuid4(), department_id=uuid4(), name="Computer Science", code="CSC", award="BSc", duration_years=4, study_mode="FULL_TIME", status="active")
     return student, programme
+
+
+def test_active_student_programme_partial_unique_index_metadata():
+    index = next(
+        item
+        for item in GraduationRecord.__table__.indexes
+        if item.name == "uq_graduation_records_active_student_programme"
+    )
+
+    assert isinstance(index, Index)
+    assert index.unique is True
+    assert tuple(column.name for column in index.columns) == (
+        "institution_id",
+        "student_id",
+        "programme_id",
+    )
+    predicate = str(index.dialect_options["postgresql"]["where"])
+    assert predicate == "status IN ('draft', 'confirmed')"
+    assert "revoked" not in predicate
+    assert "inactive" not in predicate
 
 
 def eligibility(student: Student, programme: Programme, *, eligible=True) -> GraduationEligibilityEvaluation:
