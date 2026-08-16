@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     JWT_ISSUER: str = "ngozi-smart-campus"
     JWT_AUDIENCE: str = "ngozi-smart-campus-api"
     ACCESS_TOKEN_EXPIRE_MINUTES: PositiveInt = 15
+    CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -49,6 +50,10 @@ class Settings(BaseSettings):
             port=self.DATABASE_PORT,
             database=self.DATABASE_NAME,
         )
+
+    @property
+    def cors_origins(self) -> list[str]:
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
 
 
 settings = Settings()

@@ -41,6 +41,8 @@ pnpm-debug.log*
 .yarn/
 .pnp.*
 coverage/
+web/dist/
+*.tsbuildinfo
 
 # React Native and Expo
 .expo/

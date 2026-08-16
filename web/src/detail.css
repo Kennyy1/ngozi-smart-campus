@@ -1,0 +1,270 @@
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+.detail-grid .span-2 {
+  grid-column: span 1;
+}
+.detail-grid .span-full {
+  grid-column: 1/-1;
+}
+.summary-card {
+  min-width: 0;
+}
+.summary-identity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: white;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 9px;
+  padding: 1.15rem 1.3rem;
+  margin: 1rem 0;
+  box-shadow: var(--shadow);
+}
+.summary-identity > div {
+  min-width: 0;
+}
+.summary-identity > div > span {
+  font-size: 0.68rem;
+  color: var(--green-700);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.summary-identity h2 {
+  margin: 0.15rem 0;
+  color: var(--navy);
+  font-size: 1.25rem;
+}
+.summary-identity p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+.summary-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  min-width: 220px;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 0.85rem 1.2rem;
+  margin: 0;
+}
+.field-grid > div {
+  min-width: 0;
+}
+.field-grid dt {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.035em;
+  margin-bottom: 0.18rem;
+}
+.field-grid dd {
+  margin: 0;
+  color: #263b38;
+  font-size: 0.88rem;
+  font-weight: 600;
+  min-width: 0;
+}
+.text-value {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.identifier-value {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  font-size: 0.78rem;
+}
+.subtle-value {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+.muted-value {
+  color: #7b8987;
+  font-style: italic;
+  font-weight: 400;
+}
+.semester-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.85rem;
+}
+.semester-grid > article {
+  border: 1px solid var(--line);
+  background: #fbfcfc;
+  border-radius: 7px;
+  padding: 1rem;
+  min-width: 0;
+}
+.semester-grid header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.85rem;
+}
+.semester-grid header span {
+  font-size: 0.67rem;
+  color: var(--green-700);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.semester-grid header strong {
+  color: var(--navy);
+  font-size: 0.9rem;
+}
+.identifier-row {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.2rem 0.75rem;
+  border-top: 1px solid #e8eeec;
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  min-width: 0;
+}
+.identifier-row > span:nth-of-type(odd) {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #7b8987;
+  font-weight: 700;
+}
+.details {
+  min-width: 0;
+  width: 100%;
+}
+.details > div {
+  grid-template-columns: minmax(135px, max-content) minmax(0, 1fr);
+  align-items: start;
+}
+.details dd {
+  min-width: 0;
+  word-break: normal;
+}
+.detail-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.75rem;
+  min-width: 0;
+  width: 100%;
+}
+.detail-list > .details {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 0.8rem;
+  background: #fbfcfc;
+}
+.state {
+  width: 100%;
+  min-width: 0;
+}
+.state > span,
+.state > strong {
+  max-width: 100%;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.panel > .state {
+  min-height: 130px;
+  grid-column: 1/-1;
+}
+.detail-grid .span-2 {
+  grid-column: span 2;
+}
+.detail-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.35rem 0 1rem;
+}
+.detail-navigation nav {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  min-width: 0;
+}
+.detail-navigation nav a {
+  text-decoration: none;
+}
+.back-link {
+  font-size: 0.8rem;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.clearance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+.clearance-grid > article {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 1rem;
+  background: #fbfcfc;
+}
+.clearance-grid h3 {
+  font-size: 0.88rem;
+  color: var(--navy);
+  margin: 0 0 0.8rem;
+}
+.clearance-grid .field-grid {
+  grid-template-columns: repeat(2, minmax(145px, 1fr));
+}
+.summary-card.span-full > .field-grid {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+@media (max-width: 760px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-grid .span-2,
+  .detail-grid .span-full {
+    grid-column: 1;
+  }
+  .summary-identity {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .summary-status {
+    align-items: flex-start;
+    min-width: 0;
+    width: 100%;
+  }
+  .field-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  .details > div {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+  .semester-grid,
+  .detail-list,
+  .clearance-grid {
+    grid-template-columns: 1fr;
+  }
+  .clearance-grid .field-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-navigation {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+  }
+}

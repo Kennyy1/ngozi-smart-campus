@@ -8,6 +8,11 @@ from app.core.security import hash_password
 from app.models.department import Department
 from app.models.lecturer import Lecturer
 from app.models.user import User
+from app.services.role_assignment_service import (
+    LECTURER_ROLE,
+    LECTURER_ROLE_DESCRIPTION,
+    ensure_user_role,
+)
 from app.schemas.lecturer import AcademicRank, EmploymentStatus, LecturerCreate, LecturerRead, LecturerUpdate
 
 
@@ -25,7 +30,16 @@ def create_lecturer(session: Session, *, institution_id: UUID, lecturer_data: Le
     user = User(institution_id=institution_id, email=str(lecturer_data.email), password_hash=hash_password(lecturer_data.password), first_name=lecturer_data.first_name, last_name=lecturer_data.last_name, phone=lecturer_data.phone, is_active=True, is_verified=False)
     session.add(user); _flush(session)
     lecturer = Lecturer(institution_id=institution_id, user_id=user.id, department_id=department.id, staff_number=lecturer_data.staff_number, academic_rank=lecturer_data.academic_rank.value, specialization=lecturer_data.specialization, employment_status=lecturer_data.employment_status.value, employment_date=lecturer_data.employment_date, office_location=lecturer_data.office_location)
-    lecturer.user = user; session.add(lecturer); _commit(session); session.refresh(lecturer)
+    lecturer.user = user
+    session.add(lecturer)
+    ensure_user_role(
+        session,
+        user=user,
+        institution_id=institution_id,
+        role_name=LECTURER_ROLE,
+        role_description=LECTURER_ROLE_DESCRIPTION,
+    )
+    _commit(session); session.refresh(lecturer)
     return _build_lecturer_response(lecturer)
 
 

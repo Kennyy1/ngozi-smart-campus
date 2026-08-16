@@ -11,9 +11,12 @@ from app.main import app
 from app.models.department import Department
 from app.models.institution import Institution
 from app.models.lecturer import Lecturer
+from app.models.role import Role
 from app.models.user import User
+from app.models.user_role import UserRole
 from app.schemas.lecturer import AcademicRank, EmploymentStatus, LecturerCreate, LecturerUpdate
 from app.services import lecturer_service
+from app.services.role_assignment_service import LECTURER_ROLE
 from app.services.authentication import AuthenticatedUserContext
 
 
@@ -68,9 +71,16 @@ def test_schema_normalization_and_security() -> None:
 def test_creation_hashes_password_and_derives_institution() -> None:
     context = _context(); department = _department(context.institution.id); session = FakeSession(department, None, None)
     result = lecturer_service.create_lecturer(session, institution_id=context.institution.id, lecturer_data=_payload(department.id))  # type: ignore[arg-type]
-    user, profile = session.added
+    user = next(item for item in session.added if isinstance(item, User))
+    profile = next(item for item in session.added if isinstance(item, Lecturer))
+    role = next(item for item in session.added if isinstance(item, Role))
+    assignment = next(item for item in session.added if isinstance(item, UserRole))
     assert user.password_hash != "ChangeMe123!" and "password_hash" not in result.model_dump()
     assert profile.institution_id == context.institution.id and session.flushes == 1 and session.commits == 1
+    assert role.name == LECTURER_ROLE
+    assert assignment.user_id == user.id
+    assert assignment.role_id == role.id
+    assert assignment.institution_id == context.institution.id
 
 
 @pytest.mark.parametrize(("results", "error"), [([], lecturer_service.LecturerDepartmentNotFoundError), (["department", uuid4()], lecturer_service.DuplicateLecturerEmailError), (["department", None, uuid4()], lecturer_service.DuplicateStaffNumberError)])

@@ -1,0 +1,2 @@
+import {useEffect,useState} from 'react';
+export function useApi<T>(loader:()=>Promise<T>,deps:readonly unknown[]=[]){const [data,setData]=useState<T>();const [error,setError]=useState<Error>();const [loading,setLoading]=useState(true);useEffect(()=>{let active=true;setLoading(true);setError(undefined);loader().then(value=>{if(active)setData(value)}).catch(reason=>{if(active)setError(reason instanceof Error?reason:new Error('Request failed'))}).finally(()=>{if(active)setLoading(false)});return()=>{active=false}},deps);return{data,error,loading}}
