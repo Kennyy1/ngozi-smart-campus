@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from app.models.audit_log import AuditLog
     from app.models.institution import Institution
     from app.models.lecturer import Lecturer
+    from app.models.guardian import Guardian
     from app.models.student import Student
     from app.models.user_role import UserRole
 
@@ -76,6 +77,7 @@ class User(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         back_populates="user",
         uselist=False,
     )
+    guardian_profile: Mapped[Guardian | None] = relationship(back_populates="user", uselist=False)
     audit_logs: Mapped[list[AuditLog]] = relationship(back_populates="user")
     recorded_attendance_records: Mapped[list[AttendanceRecord]] = relationship(back_populates="recorded_by_user")
     graded_assessment_scores: Mapped[list[AssessmentScore]] = relationship(back_populates="graded_by_user")

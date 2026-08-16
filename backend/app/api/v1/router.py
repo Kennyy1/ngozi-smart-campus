@@ -38,10 +38,16 @@ from app.api.v1.endpoints import (
     student_portal_router,
     lecturer_portal_router,
     admin_portal_router,
+    guardians_router,
+    guardian_student_relationships_router,
+    guardian_portal_router,
 )
 
 
 api_router = APIRouter()
+api_router.include_router(guardian_portal_router)
+api_router.include_router(guardians_router)
+api_router.include_router(guardian_student_relationships_router)
 api_router.include_router(student_portal_router)
 api_router.include_router(lecturer_portal_router)
 api_router.include_router(admin_portal_router)

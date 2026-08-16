@@ -32,6 +32,8 @@ EXPECTED_TABLES = {
     "academic_documents",
     "clearance_requirements",
     "student_clearances",
+    "guardians",
+    "guardian_students",
     "lecturers",
     "lecturer_assignments",
     "programmes",

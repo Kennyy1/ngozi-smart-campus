@@ -12,6 +12,8 @@ from app.models.user_role import UserRole
 
 LECTURER_ROLE = "lecturer"
 LECTURER_ROLE_DESCRIPTION = "Institution lecturer."
+GUARDIAN_ROLE = "guardian"
+GUARDIAN_ROLE_DESCRIPTION = "Institution parent or guardian."
 
 
 class RoleAssignmentInstitutionMismatchError(Exception):

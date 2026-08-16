@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from app.models.graduation_record import GraduationRecord
     from app.models.academic_document import AcademicDocument
     from app.models.student_clearance import StudentClearance
+    from app.models.guardian_student import GuardianStudent
 
 
 class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -76,3 +77,4 @@ class Student(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     graduation_records: Mapped[list[GraduationRecord]] = relationship(back_populates="student")
     academic_documents: Mapped[list[AcademicDocument]] = relationship(back_populates="student")
     clearances: Mapped[list[StudentClearance]] = relationship(back_populates="student")
+    guardian_relationships: Mapped[list[GuardianStudent]] = relationship(back_populates="student")

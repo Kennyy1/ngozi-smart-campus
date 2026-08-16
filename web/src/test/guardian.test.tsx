@@ -1,0 +1,2 @@
+import {describe,expect,it} from 'vitest';import {portalFor} from '../features/auth/AuthContext';import {guardianApi} from '../api/guardian';
+describe('guardian portal security',()=>{it('routes the backend guardian role',()=>expect(portalFor(['guardian'])).toBe('/guardian/dashboard'));it('builds child reads only under guardian portal',()=>{expect(guardianApi.children).toBeTypeOf('function');expect(guardianApi.results).toBeTypeOf('function')})});

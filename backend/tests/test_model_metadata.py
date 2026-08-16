@@ -1,4 +1,5 @@
-from sqlalchemy import UniqueConstraint
+from sqlalchemy import Index, UniqueConstraint
+from sqlalchemy.dialects import postgresql
 
 import app.models  # noqa: F401
 from app.db.base import Base
@@ -26,6 +27,8 @@ EXPECTED_TABLES = {
     "academic_documents",
     "clearance_requirements",
     "student_clearances",
+    "guardians",
+    "guardian_students",
     "lecturers",
     "lecturer_assignments",
     "programmes",
@@ -54,6 +57,35 @@ def _foreign_key_target(table_name: str, column_name: str) -> str:
 
 def test_all_models_are_registered() -> None:
     assert set(Base.metadata.tables) == EXPECTED_TABLES
+
+
+def test_guardian_defaults_and_active_relationship_index() -> None:
+    guardians = Base.metadata.tables["guardians"]
+    relationships = Base.metadata.tables["guardian_students"]
+
+    assert str(guardians.c.is_active.server_default.arg).lower() == "true"
+    for column_name in (
+        "is_primary",
+        "can_view_results",
+        "can_view_attendance",
+        "can_view_academic_performance",
+        "can_view_transcript",
+        "can_view_clearance",
+    ):
+        assert str(relationships.c[column_name].server_default.arg).lower() == "false"
+    assert str(relationships.c.status.server_default.arg) == "pending"
+
+    index = next(
+        item
+        for item in relationships.indexes
+        if item.name == "uq_guardian_students_active_pair"
+    )
+    assert isinstance(index, Index)
+    assert index.unique is True
+    assert tuple(column.name for column in index.columns) == ("guardian_id", "student_id")
+    predicate = index.dialect_options["postgresql"]["where"]
+    compiled = str(predicate.compile(dialect=postgresql.dialect()))
+    assert compiled == "status <> 'revoked'"
 
 
 def test_expected_unique_constraints() -> None:

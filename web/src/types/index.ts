@@ -1,5 +1,5 @@
 export type Role =
-  "student" | "lecturer" | "administrator" | "system_super_admin";
+  "student" | "lecturer" | "guardian" | "administrator" | "system_super_admin";
 export interface AuthenticatedUser {
   id: string;
   institution_id: string;
@@ -155,6 +155,9 @@ export interface StudentDocument {
   issued_at: string | null;
   verification_code: string;
 }
+export interface GuardianChild {student_id:string;matriculation_number:string;student_name:string;programme_name:string|null;current_level:string|null;enrollment_status:string;relationship_type:string;is_primary:boolean;can_view_results:boolean;can_view_attendance:boolean;can_view_academic_performance:boolean;can_view_transcript:boolean;can_view_clearance:boolean}
+export interface GuardianDashboard {guardian_id:string;guardian_name:string;child_count:number;children:GuardianChild[]}
+export interface ChildOverview {child:GuardianChild;result_count:number|null;attendance_percentage:string|null;current_gpa:string|null;cgpa:string|null;academic_standing:string|null;clearance:{is_fully_cleared:boolean;pending_count:number}|null}
 export interface LecturerDashboard {
   lecturer_id: string;
   staff_number: string;

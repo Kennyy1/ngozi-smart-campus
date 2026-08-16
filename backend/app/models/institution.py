@@ -37,6 +37,8 @@ if TYPE_CHECKING:
     from app.models.academic_document import AcademicDocument
     from app.models.clearance_requirement import ClearanceRequirement
     from app.models.student_clearance import StudentClearance
+    from app.models.guardian import Guardian
+    from app.models.guardian_student import GuardianStudent
 
 
 class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -104,6 +106,8 @@ class Institution(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     academic_documents: Mapped[list[AcademicDocument]] = relationship(back_populates="institution")
     clearance_requirements: Mapped[list[ClearanceRequirement]] = relationship(back_populates="institution")
     student_clearances: Mapped[list[StudentClearance]] = relationship(back_populates="institution")
+    guardians: Mapped[list[Guardian]] = relationship(back_populates="institution")
+    guardian_student_relationships: Mapped[list[GuardianStudent]] = relationship(back_populates="institution")
     audit_logs: Mapped[list[AuditLog]] = relationship(
         back_populates="institution",
     )

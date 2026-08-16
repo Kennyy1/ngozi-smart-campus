@@ -1,0 +1,4 @@
+import {request} from './client';
+import type {AcademicPerformance,GuardianChild,GuardianDashboard,ChildOverview,StudentAttendanceSummary,StudentClearance,StudentResult,StudentTranscript} from '../types';
+const child=(id:string,path:string)=>`/guardian-portal/children/${encodeURIComponent(id)}/${path}`;
+export const guardianApi={dashboard:()=>request<GuardianDashboard>('/guardian-portal/dashboard'),children:()=>request<GuardianChild[]>('/guardian-portal/children'),overview:(id:string)=>request<ChildOverview>(child(id,'overview')),results:(id:string)=>request<StudentResult[]>(child(id,'results')),attendance:(id:string)=>request<StudentAttendanceSummary[]>(child(id,'attendance')),performance:(id:string)=>request<AcademicPerformance>(child(id,'academic-performance')),transcript:(id:string)=>request<StudentTranscript>(child(id,'transcript')),clearance:(id:string)=>request<StudentClearance>(child(id,'clearance'))};
