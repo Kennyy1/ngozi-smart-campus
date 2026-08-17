@@ -20,7 +20,7 @@ def _context(role: str) -> AuthenticatedUserContext:
     return AuthenticatedUserContext(user=user, institution=institution, roles=(role,))
 
 
-def test_all_portal_routes_are_registered_as_get_only() -> None:
+def test_all_portal_routes_are_registered_with_scoped_lecturer_writes() -> None:
     expected = {
         "/api/v1/student-portal/dashboard", "/api/v1/student-portal/profile",
         "/api/v1/student-portal/courses", "/api/v1/student-portal/attendance",
@@ -33,6 +33,10 @@ def test_all_portal_routes_are_registered_as_get_only() -> None:
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/assessments",
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/examinations",
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/results",
+        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/class-sessions",
+        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/class-sessions/{class_session_id}/attendance",
+        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/assessments/{component_id}/scores",
+        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/examinations/{examination_id}/scores",
         "/api/v1/admin-portal/dashboard", "/api/v1/admin-portal/students/{student_id}/summary",
         "/api/v1/admin-portal/course-offerings/{course_offering_id}/summary",
     }
@@ -42,7 +46,8 @@ def test_all_portal_routes_are_registered_as_get_only() -> None:
         for route in router.routes
     }
     assert set(routes) == expected
-    assert all(methods == {"GET"} for methods in routes.values())
+    assert all(methods <= {"GET", "PUT"} for methods in routes.values())
+    assert all(methods == {"GET"} for path, methods in routes.items() if "/admin-portal/" in path or "/student-portal/" in path)
 
 
 def test_portals_require_authentication() -> None:

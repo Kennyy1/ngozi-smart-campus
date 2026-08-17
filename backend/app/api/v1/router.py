@@ -41,10 +41,12 @@ from app.api.v1.endpoints import (
     guardians_router,
     guardian_student_relationships_router,
     guardian_portal_router,
+    course_materials_router,
 )
 
 
 api_router = APIRouter()
+api_router.include_router(course_materials_router)
 api_router.include_router(guardian_portal_router)
 api_router.include_router(guardians_router)
 api_router.include_router(guardian_student_relationships_router)

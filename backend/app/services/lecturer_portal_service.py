@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal, ROUND_HALF_UP
 from uuid import UUID
 
@@ -19,6 +19,12 @@ from app.models.lecturer_assignment import LecturerAssignment
 from app.models.result import Result
 from app.models.student import Student
 from app.models.user import User
+from app.schemas.attendance_record import AttendanceRecordCreate, AttendanceRecordUpdate
+from app.schemas.assessment_score import AssessmentScoreCreate, AssessmentScoreUpdate
+from app.schemas.examination_score import ExaminationScoreCreate, ExaminationScoreUpdate
+from app.services.attendance_record_service import create_attendance_record, update_attendance_record
+from app.services.assessment_score_service import create_assessment_score, update_assessment_score
+from app.services.examination_score_service import create_examination_score, update_examination_score
 from app.schemas.lecturer_portal import *
 
 
@@ -122,3 +128,62 @@ def dashboard(session: Session, *, institution_id: UUID, user_id: UUID) -> Lectu
     pending=session.scalar(select(func.count()).select_from(AssessmentComponent).where(AssessmentComponent.institution_id==institution_id,AssessmentComponent.lecturer_assignment_id.in_(assignment_ids or [UUID(int=0)]),AssessmentComponent.status=="draft")) or 0
     completed=session.scalar(select(func.count()).select_from(Examination).where(Examination.institution_id==institution_id,Examination.lecturer_assignment_id.in_(assignment_ids or [UUID(int=0)]),Examination.status=="completed")) or 0
     return LecturerDashboard(lecturer_id=lecturer.id,staff_number=lecturer.staff_number,name=f"{lecturer.user.first_name} {lecturer.user.last_name}".strip(),department=lecturer.department.name,employment_status=lecturer.employment_status,active_course_assignment_count=len(courses),current_course_offering_count=sum(1 for c in courses),upcoming_class_session_count=upcoming,total_registered_students=sum(c.registered_student_count for c in courses),pending_assessment_component_count=pending,completed_examination_count=completed)
+
+
+def class_sessions(session:Session,*,institution_id:UUID,user_id:UUID,course_offering_id:UUID):
+    lecturer=resolve_lecturer(session,institution_id=institution_id,user_id=user_id);assignment=resolve_assignment(session,institution_id=institution_id,lecturer_id=lecturer.id,course_offering_id=course_offering_id)
+    return list(session.scalars(select(ClassSession).where(ClassSession.institution_id==institution_id,ClassSession.course_offering_id==course_offering_id,ClassSession.lecturer_assignment_id==assignment.id,ClassSession.status.in_(("scheduled","completed"))).order_by(ClassSession.session_date.desc(),ClassSession.start_time)).all())
+
+
+def attendance_sheet(session:Session,*,institution_id:UUID,user_id:UUID,course_offering_id:UUID,class_session_id:UUID):
+    sessions=class_sessions(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id)
+    if class_session_id not in {x.id for x in sessions}:raise LecturerPortalOfferingNotFoundError()
+    students=list_students(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id)
+    existing={x.course_registration_id:x for x in session.scalars(select(AttendanceRecord).where(AttendanceRecord.institution_id==institution_id,AttendanceRecord.class_session_id==class_session_id,AttendanceRecord.status=="active")).all()}
+    return [{**x.model_dump(),"attendance_record_id":existing[x.course_registration_id].id if x.course_registration_id in existing else None,"attendance_status":existing[x.course_registration_id].attendance_status if x.course_registration_id in existing else None} for x in students]
+
+
+def save_attendance(session:Session,*,institution_id:UUID,user_id:UUID,course_offering_id:UUID,class_session_id:UUID,records:list[dict]):
+    allowed={x["course_registration_id"] for x in attendance_sheet(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id,class_session_id=class_session_id)}
+    existing={x.course_registration_id:x for x in session.scalars(select(AttendanceRecord).where(AttendanceRecord.institution_id==institution_id,AttendanceRecord.class_session_id==class_session_id,AttendanceRecord.status=="active")).all()};output=[]
+    for row in records:
+        registration_id=UUID(str(row["course_registration_id"]));status=row["attendance_status"]
+        if registration_id not in allowed:raise LecturerPortalOfferingNotFoundError()
+        check_in=datetime.now().astimezone() if status=="late" else None
+        if registration_id in existing:output.append(update_attendance_record(session,attendance_record_id=existing[registration_id].id,institution_id=institution_id,attendance_data=AttendanceRecordUpdate(attendance_status=status,check_in_time=check_in)))
+        else:output.append(create_attendance_record(session,institution_id=institution_id,recorded_by_user_id=user_id,attendance_data=AttendanceRecordCreate(class_session_id=class_session_id,course_registration_id=registration_id,attendance_status=status,check_in_time=check_in)))
+    return output
+
+
+def assessment_sheet(session:Session,*,institution_id:UUID,user_id:UUID,course_offering_id:UUID,component_id:UUID):
+    component=next((x for x in assessments(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id) if x.component_id==component_id),None)
+    if component is None:raise LecturerPortalOfferingNotFoundError()
+    students=list_students(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id);existing={x.course_registration_id:x for x in session.scalars(select(AssessmentScore).where(AssessmentScore.institution_id==institution_id,AssessmentScore.assessment_component_id==component_id,AssessmentScore.status=="active")).all()}
+    return {"item":component.model_dump(),"students":[{**x.model_dump(),"score_id":existing[x.course_registration_id].id if x.course_registration_id in existing else None,"score":existing[x.course_registration_id].score if x.course_registration_id in existing else None} for x in students]}
+
+
+def save_assessment_scores(session:Session,*,institution_id:UUID,user_id:UUID,course_offering_id:UUID,component_id:UUID,scores:list[dict]):
+    sheet=assessment_sheet(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id,component_id=component_id);allowed={str(x["course_registration_id"]) for x in sheet["students"]};existing={str(x["course_registration_id"]):x.get("score_id") for x in sheet["students"]};out=[]
+    for row in scores:
+        rid=str(row["course_registration_id"])
+        if rid not in allowed:raise LecturerPortalOfferingNotFoundError()
+        if existing[rid]:out.append(update_assessment_score(session,assessment_score_id=existing[rid],institution_id=institution_id,assessment_score_data=AssessmentScoreUpdate(score=row["score"])))
+        else:out.append(create_assessment_score(session,institution_id=institution_id,graded_by_user_id=user_id,assessment_score_data=AssessmentScoreCreate(assessment_component_id=component_id,course_registration_id=UUID(rid),score=row["score"])))
+    return out
+
+
+def examination_sheet(session:Session,*,institution_id:UUID,user_id:UUID,course_offering_id:UUID,examination_id:UUID):
+    exam=next((x for x in examinations(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id) if x.examination_id==examination_id),None)
+    if exam is None:raise LecturerPortalOfferingNotFoundError()
+    students=list_students(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id);existing={x.course_registration_id:x for x in session.scalars(select(ExaminationScore).where(ExaminationScore.institution_id==institution_id,ExaminationScore.examination_id==examination_id,ExaminationScore.status=="active")).all()}
+    return {"item":exam.model_dump(),"students":[{**x.model_dump(),"score_id":existing[x.course_registration_id].id if x.course_registration_id in existing else None,"score":existing[x.course_registration_id].score if x.course_registration_id in existing else None} for x in students]}
+
+
+def save_examination_scores(session:Session,*,institution_id:UUID,user_id:UUID,course_offering_id:UUID,examination_id:UUID,scores:list[dict]):
+    sheet=examination_sheet(session,institution_id=institution_id,user_id=user_id,course_offering_id=course_offering_id,examination_id=examination_id);allowed={str(x["course_registration_id"]) for x in sheet["students"]};existing={str(x["course_registration_id"]):x.get("score_id") for x in sheet["students"]};out=[]
+    for row in scores:
+        rid=str(row["course_registration_id"])
+        if rid not in allowed:raise LecturerPortalOfferingNotFoundError()
+        if existing[rid]:out.append(update_examination_score(session,examination_score_id=existing[rid],institution_id=institution_id,examination_score_data=ExaminationScoreUpdate(score=row["score"])))
+        else:out.append(create_examination_score(session,institution_id=institution_id,graded_by_user_id=user_id,examination_score_data=ExaminationScoreCreate(examination_id=examination_id,course_registration_id=UUID(rid),score=row["score"])))
+    return out

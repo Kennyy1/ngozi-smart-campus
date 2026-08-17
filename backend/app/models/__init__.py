@@ -30,6 +30,7 @@ from app.models.clearance_requirement import ClearanceRequirement
 from app.models.student_clearance import StudentClearance
 from app.models.guardian import Guardian
 from app.models.guardian_student import GuardianStudent
+from app.models.course_material import CourseMaterial
 
 __all__ = [
     "AcademicLevel",
@@ -64,4 +65,5 @@ __all__ = [
     "StudentClearance",
     "Guardian",
     "GuardianStudent",
+    "CourseMaterial",
 ]

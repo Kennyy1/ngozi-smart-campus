@@ -6,6 +6,7 @@ from app.api.dependencies import get_db_session,require_roles
 from app.schemas.lecturer_portal import *
 from app.services.authentication import AuthenticatedUserContext
 from app.services import lecturer_portal_service as service
+from pydantic import BaseModel
 
 router=APIRouter(prefix="/lecturer-portal",tags=["Lecturer Portal"])
 LecturerUser=Annotated[AuthenticatedUserContext,Depends(require_roles("lecturer"))]
@@ -27,3 +28,19 @@ def assessments(course_offering_id:UUID,session:Annotated[Session,Depends(get_db
 def examinations(course_offering_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.examinations,session,authenticated,course_offering_id=course_offering_id)
 @router.get("/course-offerings/{course_offering_id}/results",response_model=LecturerResultOverview)
 def results(course_offering_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.results,session,authenticated,course_offering_id=course_offering_id)
+class Rows(BaseModel):records:list[dict]
+class Scores(BaseModel):scores:list[dict]
+@router.get("/course-offerings/{course_offering_id}/class-sessions")
+def sessions(course_offering_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.class_sessions,session,authenticated,course_offering_id=course_offering_id)
+@router.get("/course-offerings/{course_offering_id}/class-sessions/{class_session_id}/attendance")
+def sheet(course_offering_id:UUID,class_session_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.attendance_sheet,session,authenticated,course_offering_id=course_offering_id,class_session_id=class_session_id)
+@router.put("/course-offerings/{course_offering_id}/class-sessions/{class_session_id}/attendance")
+def save_sheet(course_offering_id:UUID,class_session_id:UUID,request:Rows,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.save_attendance,session,authenticated,course_offering_id=course_offering_id,class_session_id=class_session_id,records=request.records)
+@router.get("/course-offerings/{course_offering_id}/assessments/{component_id}/scores")
+def assessment_sheet(course_offering_id:UUID,component_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.assessment_sheet,session,authenticated,course_offering_id=course_offering_id,component_id=component_id)
+@router.put("/course-offerings/{course_offering_id}/assessments/{component_id}/scores")
+def assessment_save(course_offering_id:UUID,component_id:UUID,request:Scores,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.save_assessment_scores,session,authenticated,course_offering_id=course_offering_id,component_id=component_id,scores=request.scores)
+@router.get("/course-offerings/{course_offering_id}/examinations/{examination_id}/scores")
+def examination_sheet(course_offering_id:UUID,examination_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.examination_sheet,session,authenticated,course_offering_id=course_offering_id,examination_id=examination_id)
+@router.put("/course-offerings/{course_offering_id}/examinations/{examination_id}/scores")
+def examination_save(course_offering_id:UUID,examination_id:UUID,request:Scores,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.save_examination_scores,session,authenticated,course_offering_id=course_offering_id,examination_id=examination_id,scores=request.scores)

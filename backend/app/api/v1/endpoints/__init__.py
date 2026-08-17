@@ -80,5 +80,6 @@ from app.api.v1.endpoints.lecturer_portal import router as lecturer_portal_route
 from app.api.v1.endpoints.admin_portal import router as admin_portal_router
 from app.api.v1.endpoints.guardians import router as guardians_router, relationships_router as guardian_student_relationships_router
 from app.api.v1.endpoints.guardian_portal import router as guardian_portal_router
+from app.api.v1.endpoints.course_materials import router as course_materials_router
 
-__all__ += ["student_portal_router", "lecturer_portal_router", "admin_portal_router", "guardians_router", "guardian_student_relationships_router", "guardian_portal_router"]
+__all__ += ["student_portal_router", "lecturer_portal_router", "admin_portal_router", "guardians_router", "guardian_student_relationships_router", "guardian_portal_router", "course_materials_router"]

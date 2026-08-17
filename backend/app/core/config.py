@@ -1,4 +1,5 @@
 from typing import ClassVar
+from pathlib import Path
 
 from pydantic import PositiveInt, SecretStr, field_validator
 from sqlalchemy import URL
@@ -25,6 +26,8 @@ class Settings(BaseSettings):
     JWT_AUDIENCE: str = "ngozi-smart-campus-api"
     ACCESS_TOKEN_EXPIRE_MINUTES: PositiveInt = 15
     CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
+    COURSE_MATERIAL_STORAGE_DIR: Path = Path("runtime/course_materials")
+    COURSE_MATERIAL_MAX_UPLOAD_BYTES: PositiveInt = 25 * 1024 * 1024
 
     model_config = SettingsConfigDict(
         env_file=".env",
