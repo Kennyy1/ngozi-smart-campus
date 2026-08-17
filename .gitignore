@@ -25,6 +25,7 @@ env/
 .env
 .env.*
 !.env.example
+!mobile/.env.release.example
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
@@ -78,6 +79,11 @@ logs/
 tmp/
 temp/
 runtime/
+runtime/mobile_releases/
+mobile/*.jks
+mobile/*.keystore
+mobile/credentials.json
+mobile/*.apk
 *.tmp
 *.swp
 *.swo

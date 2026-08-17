@@ -22,6 +22,7 @@ EXPECTED_TABLES = {
     "course_offerings",
     "course_registrations",
     "course_materials",
+    "mobile_app_releases",
     "departments",
     "faculties",
     "examinations",

@@ -28,6 +28,8 @@ class Settings(BaseSettings):
     CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
     COURSE_MATERIAL_STORAGE_DIR: Path = Path("runtime/course_materials")
     COURSE_MATERIAL_MAX_UPLOAD_BYTES: PositiveInt = 25 * 1024 * 1024
+    MOBILE_RELEASE_STORAGE_DIR: Path = Path("runtime/mobile_releases")
+    MOBILE_RELEASE_MAX_UPLOAD_BYTES: PositiveInt = 150 * 1024 * 1024
 
     model_config = SettingsConfigDict(
         env_file=".env",

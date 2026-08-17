@@ -5,6 +5,7 @@ import App from "./App";
 import { AuthProvider } from "./features/auth/AuthContext";
 import "./styles.css";
 import "./detail.css";
+import "./release.css";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>

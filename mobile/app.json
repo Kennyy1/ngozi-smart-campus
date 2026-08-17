@@ -1,1 +1,32 @@
-{"expo":{"name":"Ngozi Smart Campus","slug":"ngozi-smart-campus","scheme":"ngozi-campus","version":"0.1.0","orientation":"portrait","userInterfaceStyle":"light","plugins":["expo-router","expo-secure-store"],"experiments":{"typedRoutes":true},"android":{"package":"com.ngozi.smartcampus"},"ios":{"bundleIdentifier":"com.ngozi.smartcampus"}}}
+{
+  "expo": {
+    "name": "Ngozi Smart Campus",
+    "slug": "ngozi-smart-campus",
+    "scheme": "ngozi-campus",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      ["expo-build-properties", {"android": {"usesCleartextTraffic": true}}]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "android": {
+      "package": "com.ngozi.smartcampus",
+      "versionCode": 1
+    },
+    "ios": {
+      "bundleIdentifier": "com.ngozi.smartcampus"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ba10f198-b67f-4743-a57d-0cf1d7eed5f2"
+      }
+    },
+    "owner": "kennycode50"
+  }
+}
