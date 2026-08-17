@@ -57,7 +57,7 @@ export const StatCard = ({
   </article>
 );
 export const StatusBadge = ({ value }: { value: string | boolean }) => {
-  const raw = typeof value === "boolean" ? (value ? "yes" : "no") : value;
+  const raw = typeof value === "boolean" ? (value ? "yes" : "no") : value || "not available";
   return (
     <span className={`badge badge-${raw.toLowerCase().replace(/\s/g, "-")}`}>
       {humanize(raw)}
