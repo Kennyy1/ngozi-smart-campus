@@ -1,0 +1,1 @@
+import {studentApi} from '../../src/api/portals';import {ListScreen} from '../../src/components/ApiScreens';export default function Page(){return <ListScreen title="My courses" load={studentApi.courses} fields={['course_code','title','credit_units','semester','registration_status']}/>}

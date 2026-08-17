@@ -1,0 +1,1 @@
+{"expo":{"name":"Ngozi Smart Campus","slug":"ngozi-smart-campus","scheme":"ngozi-campus","version":"0.1.0","orientation":"portrait","userInterfaceStyle":"light","plugins":["expo-router","expo-secure-store"],"experiments":{"typedRoutes":true},"android":{"package":"com.ngozi.smartcampus"},"ios":{"bundleIdentifier":"com.ngozi.smartcampus"}}}

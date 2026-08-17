@@ -1,0 +1,1 @@
+import {studentApi} from '../../src/api/portals';import {DetailScreen} from '../../src/components/ApiScreens';export default function Page(){return <DetailScreen title="Student home" load={studentApi.dashboard} highlights={['programme_name','current_level','current_academic_session','current_semester','current_gpa','cgpa','academic_standing','registered_course_count']}/>}

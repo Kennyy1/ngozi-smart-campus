@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import test from 'node:test';
+const source=async path=>readFile(new URL(`../${path}`,import.meta.url),'utf8');
+test('authentication uses SecureStore and clears tokens on 401',async()=>{assert.match(await source('src/storage/authStorage.ts'),/expo-secure-store/);const client=await source('src/api/client.ts');assert.match(client,/response\.status===401/);assert.match(client,/authStorage\.clear/)});
+test('role routing uses real backend role names',async()=>{const auth=await source('src/services/AuthContext.tsx');for(const role of ['student','lecturer','guardian','administrator'])assert.match(auth,new RegExp(`includes\\('${role}'\\)`))});
+test('guardian child requests are derived from the linked-child API',async()=>{const api=await source('src/api/portals.ts');assert.match(api,/children:\(\)=>request<GuardianChild\[]>\('\/guardian-portal\/children'\)/);assert.match(api,/encodeURIComponent\(id\)/)});
+test('portal modules expose required read-only endpoints',async()=>{const api=await source('src/api/portals.ts');for(const endpoint of ['student-portal/results','student-portal/attendance','lecturer-portal/courses','guardian-portal/dashboard'])assert.ok(api.includes(endpoint));assert.doesNotMatch(api,/method:'(?:POST|PATCH|DELETE)'/)});

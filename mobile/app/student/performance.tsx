@@ -1,0 +1,1 @@
+import {studentApi} from '../../src/api/portals';import {DetailScreen} from '../../src/components/ApiScreens';export default function Page(){return <DetailScreen title="Academic performance" load={studentApi.performance} highlights={['current_gpa','cgpa','cumulative_attempted_units','cumulative_earned_units','academic_standing']}/>}

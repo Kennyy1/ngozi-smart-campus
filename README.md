@@ -43,6 +43,28 @@ Open `http://localhost:5173`. Run frontend checks with `npm test` and
 127.0.0.1 Vite development origins; deployments should set `CORS_ORIGINS` to a
 comma-separated list of their exact frontend origins.
 
+### Mobile application
+
+The mobile client uses Expo, React Native, Expo Router, and TypeScript. Tokens
+are stored with Expo SecureStore. Configure its single API base URL before
+starting it:
+
+```bash
+cd mobile
+cp .env.example .env
+npm install
+npm start
+```
+
+Use `http://10.0.2.2:8000/api/v1` from the Android emulator. For a physical
+device, use `http://<DEVELOPMENT_PC_LAN_IP>:8000/api/v1` and run the API with
+`uvicorn app.main:app --reload --host 0.0.0.0`. Binding to all interfaces exposes
+the development server to the LAN, so use it only on a trusted network. Native
+requests do not require weakening the browser CORS allowlist.
+
+Run mobile checks with `npm test -- --runInBand`, `npm run typecheck`,
+`npx expo-doctor`, and `npm run validate`.
+
 ## Project status
 
 The foundation includes the FastAPI backend and role-protected web portals for

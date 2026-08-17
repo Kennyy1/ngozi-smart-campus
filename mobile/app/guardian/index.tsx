@@ -1,0 +1,1 @@
+import {guardianApi} from '../../src/api/portals';import {DetailScreen} from '../../src/components/ApiScreens';export default function Page(){return <DetailScreen title="Guardian home" load={guardianApi.dashboard} highlights={['guardian_name','child_count']}/>}

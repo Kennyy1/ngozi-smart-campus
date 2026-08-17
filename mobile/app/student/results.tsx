@@ -1,0 +1,1 @@
+import {studentApi} from '../../src/api/portals';import {ListScreen} from '../../src/components/ApiScreens';export default function Page(){return <ListScreen title="Published results" load={studentApi.results} fields={['course_code','course_title','final_score','grade','grade_point','passed']}/>}

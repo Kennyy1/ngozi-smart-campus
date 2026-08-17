@@ -1,0 +1,1 @@
+import {Redirect} from 'expo-router';import {LoadingState,Screen} from '../src/components/UI';import {routeFor,useAuth} from '../src/services/AuthContext';export default function Index(){const {user,loading}=useAuth();return loading?<Screen><LoadingState/></Screen>:<Redirect href={(user?routeFor(user.roles):'/login') as never}/>}

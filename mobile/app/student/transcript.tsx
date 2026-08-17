@@ -1,0 +1,1 @@
+import {studentApi} from '../../src/api/portals';import {DetailScreen} from '../../src/components/ApiScreens';export default function Page(){return <DetailScreen title="Computed transcript" load={studentApi.transcript} highlights={['student_name','programme_name','cgpa','academic_standing']}/>}

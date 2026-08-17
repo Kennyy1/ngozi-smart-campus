@@ -1,0 +1,1 @@
+import {studentApi} from '../../src/api/portals';import {DetailScreen} from '../../src/components/ApiScreens';export default function Page(){return <DetailScreen title="Clearance" load={studentApi.clearance} highlights={['is_fully_cleared','pending_count']}/>}

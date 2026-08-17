@@ -1,0 +1,1 @@
+import {studentApi} from '../../src/api/portals';import {ListScreen} from '../../src/components/ApiScreens';export default function Page(){return <ListScreen title="Academic documents" load={studentApi.documents} fields={['type','reference','status','issued_at']}/>}
