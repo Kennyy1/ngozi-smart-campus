@@ -7,6 +7,8 @@ from app.schemas.guardian import *
 from app.schemas.student_portal import AttendanceSummary,StudentAcademicPerformance,StudentResult,StudentTranscript
 from app.services.authentication import AuthenticatedUserContext
 from app.services.guardian_portal_service import *
+from app.schemas.communication import AnnouncementReadModel
+from app.api.v1.endpoints.announcements import feed_response
 
 router=APIRouter(prefix="/guardian-portal",tags=["Guardian Portal"])
 GuardianUser=Annotated[AuthenticatedUserContext,Depends(require_roles("guardian"))]
@@ -29,3 +31,7 @@ def performance_endpoint(student_id:UUID,session:Annotated[Session,Depends(get_d
 def transcript_endpoint(student_id:UUID,session:Annotated[Session,Depends(get_db_session)],auth:GuardianUser):return _call(transcript,session,auth,student_id=student_id)
 @router.get("/children/{student_id}/clearance",response_model=GuardianClearance)
 def clearance_endpoint(student_id:UUID,session:Annotated[Session,Depends(get_db_session)],auth:GuardianUser):return _call(clearance,session,auth,student_id=student_id)
+@router.get("/announcements",response_model=list[AnnouncementReadModel])
+def announcements_endpoint(session:Annotated[Session,Depends(get_db_session)],auth:GuardianUser,view:str="current"):
+    if view not in {"current","unread","all"}:raise HTTPException(422,"view must be current, unread, or all")
+    return feed_response(session,auth.institution.id,auth.user.id,view)

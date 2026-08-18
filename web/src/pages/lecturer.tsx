@@ -108,7 +108,7 @@ export const LecturerCoursesPage = () => (
 );
 const offeringNav = (id: string) => (
   <nav className="tabs" aria-label="Course offering sections">
-    {["students", "attendance", "assessments", "examinations", "results"].map(
+    {["students", "attendance", "assessments", "examinations", "results", "announcements"].map(
       (section) => (
         <Link key={section} to={`/lecturer/course-offerings/${id}/${section}`}>
           {section}

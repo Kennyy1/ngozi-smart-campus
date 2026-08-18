@@ -6,6 +6,9 @@ from app.db.base import Base
 
 
 EXPECTED_TABLES = {
+    "announcement_reads",
+    "announcement_targets",
+    "announcements",
     "assessment_components",
     "assessment_scores",
     "attendance_records",
@@ -18,6 +21,7 @@ EXPECTED_TABLES = {
     "course_registrations",
     "course_materials",
     "mobile_app_releases",
+    "notifications",
     "departments",
     "faculties",
     "examinations",

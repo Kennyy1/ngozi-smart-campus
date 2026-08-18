@@ -32,6 +32,8 @@ from app.models.guardian import Guardian
 from app.models.guardian_student import GuardianStudent
 from app.models.course_material import CourseMaterial
 from app.models.mobile_app_release import MobileAppRelease
+from app.models.announcement import Announcement, AnnouncementTarget, AnnouncementRead
+from app.models.notification import Notification
 
 __all__ = [
     "AcademicLevel",
@@ -68,4 +70,5 @@ __all__ = [
     "GuardianStudent",
     "CourseMaterial",
     "MobileAppRelease",
+    "Announcement", "AnnouncementTarget", "AnnouncementRead", "Notification",
 ]

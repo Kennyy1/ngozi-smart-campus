@@ -11,6 +11,10 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 ALEMBIC_INI = BACKEND_ROOT / "alembic.ini"
 ALEMBIC_DIRECTORY = BACKEND_ROOT / "alembic"
 EXPECTED_TABLES = {
+    "announcements",
+    "announcement_targets",
+    "announcement_reads",
+    "notifications",
     "assessment_components",
     "assessment_scores",
     "attendance_records",

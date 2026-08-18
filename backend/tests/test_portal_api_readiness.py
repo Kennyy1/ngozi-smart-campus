@@ -26,7 +26,8 @@ def test_all_portal_routes_are_registered_with_scoped_lecturer_writes() -> None:
         "/api/v1/student-portal/courses", "/api/v1/student-portal/attendance",
         "/api/v1/student-portal/results", "/api/v1/student-portal/academic-performance",
         "/api/v1/student-portal/transcript", "/api/v1/student-portal/clearance",
-        "/api/v1/student-portal/documents", "/api/v1/lecturer-portal/dashboard",
+            "/api/v1/student-portal/documents", "/api/v1/lecturer-portal/dashboard",
+            "/api/v1/student-portal/announcements", "/api/v1/student-portal/timetable",
         "/api/v1/lecturer-portal/courses",
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/students",
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/attendance",
@@ -36,18 +37,27 @@ def test_all_portal_routes_are_registered_with_scoped_lecturer_writes() -> None:
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/class-sessions",
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/class-sessions/{class_session_id}/attendance",
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/assessments/{component_id}/scores",
-        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/examinations/{examination_id}/scores",
+            "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/examinations/{examination_id}/scores",
+            "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/announcements",
+            "/api/v1/lecturer-portal/timetable",
         "/api/v1/admin-portal/dashboard", "/api/v1/admin-portal/students/{student_id}/summary",
         "/api/v1/admin-portal/course-offerings/{course_offering_id}/summary",
     }
-    routes = {
-        f"/api/v1{route.path}": route.methods
-        for router in (student_portal.router, lecturer_portal.router, admin_portal.router)
-        for route in router.routes
-    }
-    assert set(routes) == expected
-    assert all(methods <= {"GET", "PUT"} for methods in routes.values())
-    assert all(methods == {"GET"} for path, methods in routes.items() if "/admin-portal/" in path or "/student-portal/" in path)
+    routes: dict[str, set[str]] = {}
+    for router in (student_portal.router, lecturer_portal.router, admin_portal.router):
+        for route in router.routes:
+            path = f"/api/v1{route.path}"
+            routes.setdefault(path, set()).update(route.methods or set())
+
+    expected_methods = {path: {"GET"} for path in expected}
+    expected_methods.update({
+        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/class-sessions/{class_session_id}/attendance": {"GET", "PUT"},
+        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/assessments/{component_id}/scores": {"GET", "PUT"},
+        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/examinations/{examination_id}/scores": {"GET", "PUT"},
+        "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/announcements": {"GET", "POST"},
+    })
+
+    assert routes == expected_methods
 
 
 def test_portals_require_authentication() -> None:

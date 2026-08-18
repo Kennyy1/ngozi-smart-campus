@@ -7,6 +7,8 @@ from app.schemas.lecturer_portal import *
 from app.services.authentication import AuthenticatedUserContext
 from app.services import lecturer_portal_service as service
 from pydantic import BaseModel
+from app.schemas.communication import AnnouncementReadModel,CourseAnnouncementCreate,TimetableItem,AnnouncementCreate,AnnouncementType,AudienceType
+from app.services import communication_service,timetable_service
 
 router=APIRouter(prefix="/lecturer-portal",tags=["Lecturer Portal"])
 LecturerUser=Annotated[AuthenticatedUserContext,Depends(require_roles("lecturer"))]
@@ -44,3 +46,16 @@ def assessment_save(course_offering_id:UUID,component_id:UUID,request:Scores,ses
 def examination_sheet(course_offering_id:UUID,examination_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.examination_sheet,session,authenticated,course_offering_id=course_offering_id,examination_id=examination_id)
 @router.put("/course-offerings/{course_offering_id}/examinations/{examination_id}/scores")
 def examination_save(course_offering_id:UUID,examination_id:UUID,request:Scores,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return call(service.save_examination_scores,session,authenticated,course_offering_id=course_offering_id,examination_id=examination_id,scores=request.scores)
+@router.get("/course-offerings/{course_offering_id}/announcements",response_model=list[AnnouncementReadModel])
+def offering_announcements(course_offering_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):
+    try:return communication_service.lecturer_announcements(session,institution_id=authenticated.institution.id,user_id=authenticated.user.id,offering_id=course_offering_id)
+    except communication_service.CommunicationForbidden as e:raise HTTPException(403,str(e)) from e
+@router.post("/course-offerings/{course_offering_id}/announcements",response_model=AnnouncementReadModel,status_code=201)
+def create_offering_announcement(course_offering_id:UUID,request:CourseAnnouncementCreate,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):
+    try:
+        communication_service.lecturer_offering(session,authenticated.institution.id,authenticated.user.id,course_offering_id)
+        data=AnnouncementCreate(**request.model_dump(),announcement_type=AnnouncementType.COURSE,audience_type=AudienceType.COURSE_OFFERING,target_ids=[course_offering_id])
+        return communication_service.create_announcement(session,institution_id=authenticated.institution.id,user_id=authenticated.user.id,data=data,status="published")
+    except communication_service.CommunicationForbidden as e:raise HTTPException(403,str(e)) from e
+@router.get("/timetable",response_model=list[TimetableItem])
+def timetable(session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return timetable_service.lecturer_timetable(session,authenticated.institution.id,authenticated.user.id)

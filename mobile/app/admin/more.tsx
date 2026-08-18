@@ -1,1 +1,1 @@
-import {MoreScreen} from '../../src/components/MoreScreen';export default MoreScreen;
+import {MoreScreen} from '../../src/components/MoreScreen';import {CommunicationLinks} from '../../src/components/CommunicationLinks';export default function Page(){return <MoreScreen><CommunicationLinks role="admin" announcements/></MoreScreen>}

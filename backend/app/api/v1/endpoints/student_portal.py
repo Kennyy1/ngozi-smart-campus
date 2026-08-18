@@ -8,6 +8,9 @@ from app.api.dependencies import get_db_session, require_roles
 from app.schemas.student_portal import *
 from app.services.authentication import AuthenticatedUserContext
 from app.services.student_portal_service import *
+from app.schemas.communication import AnnouncementReadModel,TimetableItem
+from app.api.v1.endpoints.announcements import feed_response
+from app.services import timetable_service
 
 router=APIRouter(prefix="/student-portal",tags=["Student Portal"])
 StudentUser=Annotated[AuthenticatedUserContext,Depends(require_roles("student"))]
@@ -38,3 +41,9 @@ def clearance_endpoint(session:Annotated[Session,Depends(get_db_session)],authen
     return get_clearance(session,institution_id=authenticated.institution.id,student_id=student.id)
 @router.get("/documents",response_model=list[StudentDocument])
 def documents_endpoint(session:Annotated[Session,Depends(get_db_session)],authenticated:StudentUser): return _call(list_documents,session,authenticated)
+@router.get("/announcements",response_model=list[AnnouncementReadModel])
+def announcements_endpoint(session:Annotated[Session,Depends(get_db_session)],authenticated:StudentUser,view:str="current"):
+    if view not in {"current","unread","all"}:raise HTTPException(422,"view must be current, unread, or all")
+    return feed_response(session,authenticated.institution.id,authenticated.user.id,view)
+@router.get("/timetable",response_model=list[TimetableItem])
+def timetable_endpoint(session:Annotated[Session,Depends(get_db_session)],authenticated:StudentUser):return timetable_service.student_timetable(session,authenticated.institution.id,authenticated.user.id)

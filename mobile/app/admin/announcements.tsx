@@ -1,0 +1,1 @@
+import {communicationApi} from '../../src/api/portals';import {CommunicationScreen} from '../../src/components/CommunicationScreen';export default function Page(){return <CommunicationScreen title="Announcements" kind="announcement" load={communicationApi.adminAnnouncements}/>}
