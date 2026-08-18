@@ -28,6 +28,8 @@ def test_all_portal_routes_are_registered_with_scoped_lecturer_writes() -> None:
         "/api/v1/student-portal/transcript", "/api/v1/student-portal/clearance",
             "/api/v1/student-portal/documents", "/api/v1/lecturer-portal/dashboard",
             "/api/v1/student-portal/announcements", "/api/v1/student-portal/timetable",
+            "/api/v1/student-portal/library", "/api/v1/student-portal/library/loans",
+            "/api/v1/student-portal/library/{item_id}",
         "/api/v1/lecturer-portal/courses",
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/students",
         "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/attendance",
@@ -40,6 +42,8 @@ def test_all_portal_routes_are_registered_with_scoped_lecturer_writes() -> None:
             "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/examinations/{examination_id}/scores",
             "/api/v1/lecturer-portal/course-offerings/{course_offering_id}/announcements",
             "/api/v1/lecturer-portal/timetable",
+            "/api/v1/lecturer-portal/library", "/api/v1/lecturer-portal/library/loans",
+            "/api/v1/lecturer-portal/library/{item_id}",
         "/api/v1/admin-portal/dashboard", "/api/v1/admin-portal/students/{student_id}/summary",
         "/api/v1/admin-portal/course-offerings/{course_offering_id}/summary",
     }

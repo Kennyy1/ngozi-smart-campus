@@ -9,6 +9,8 @@ from app.services import lecturer_portal_service as service
 from pydantic import BaseModel
 from app.schemas.communication import AnnouncementReadModel,CourseAnnouncementCreate,TimetableItem,AnnouncementCreate,AnnouncementType,AudienceType
 from app.services import communication_service,timetable_service
+from app.schemas.library import LibraryItemRead,LoanRead
+from app.services import library_service
 
 router=APIRouter(prefix="/lecturer-portal",tags=["Lecturer Portal"])
 LecturerUser=Annotated[AuthenticatedUserContext,Depends(require_roles("lecturer"))]
@@ -59,3 +61,11 @@ def create_offering_announcement(course_offering_id:UUID,request:CourseAnnouncem
     except communication_service.CommunicationForbidden as e:raise HTTPException(403,str(e)) from e
 @router.get("/timetable",response_model=list[TimetableItem])
 def timetable(session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return timetable_service.lecturer_timetable(session,authenticated.institution.id,authenticated.user.id)
+@router.get("/library",response_model=list[LibraryItemRead])
+def library(session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser,q:str|None=None):return library_service.catalogue(session,authenticated.institution.id,q=q)
+@router.get("/library/loans",response_model=list[LoanRead])
+def library_loans(session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):return library_service.loans(session,authenticated.institution.id,view="all",borrower_id=authenticated.user.id,show_borrower=False)
+@router.get("/library/{item_id}",response_model=LibraryItemRead)
+def library_item(item_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:LecturerUser):
+    try:return library_service.get_catalogue_item(session,authenticated.institution.id,item_id)
+    except library_service.LibraryNotFound as e:raise HTTPException(404,"Library resource not found") from e

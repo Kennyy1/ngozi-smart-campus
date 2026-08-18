@@ -11,6 +11,8 @@ from app.services.student_portal_service import *
 from app.schemas.communication import AnnouncementReadModel,TimetableItem
 from app.api.v1.endpoints.announcements import feed_response
 from app.services import timetable_service
+from app.schemas.library import LibraryItemRead,LoanRead
+from app.services import library_service
 
 router=APIRouter(prefix="/student-portal",tags=["Student Portal"])
 StudentUser=Annotated[AuthenticatedUserContext,Depends(require_roles("student"))]
@@ -47,3 +49,11 @@ def announcements_endpoint(session:Annotated[Session,Depends(get_db_session)],au
     return feed_response(session,authenticated.institution.id,authenticated.user.id,view)
 @router.get("/timetable",response_model=list[TimetableItem])
 def timetable_endpoint(session:Annotated[Session,Depends(get_db_session)],authenticated:StudentUser):return timetable_service.student_timetable(session,authenticated.institution.id,authenticated.user.id)
+@router.get("/library",response_model=list[LibraryItemRead])
+def library_endpoint(session:Annotated[Session,Depends(get_db_session)],authenticated:StudentUser,q:str|None=None):return library_service.catalogue(session,authenticated.institution.id,q=q)
+@router.get("/library/loans",response_model=list[LoanRead])
+def library_loans_endpoint(session:Annotated[Session,Depends(get_db_session)],authenticated:StudentUser):return library_service.loans(session,authenticated.institution.id,view="all",borrower_id=authenticated.user.id,show_borrower=False)
+@router.get("/library/{item_id}",response_model=LibraryItemRead)
+def library_item_endpoint(item_id:UUID,session:Annotated[Session,Depends(get_db_session)],authenticated:StudentUser):
+    try:return library_service.get_catalogue_item(session,authenticated.institution.id,item_id)
+    except library_service.LibraryNotFound as e:raise HTTPException(404,"Library resource not found") from e

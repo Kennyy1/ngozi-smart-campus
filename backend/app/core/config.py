@@ -30,6 +30,12 @@ class Settings(BaseSettings):
     COURSE_MATERIAL_MAX_UPLOAD_BYTES: PositiveInt = 25 * 1024 * 1024
     MOBILE_RELEASE_STORAGE_DIR: Path = Path("runtime/mobile_releases")
     MOBILE_RELEASE_MAX_UPLOAD_BYTES: PositiveInt = 150 * 1024 * 1024
+    LIBRARY_RESOURCE_STORAGE_DIR: Path = Path("runtime/library_resources")
+    LIBRARY_RESOURCE_MAX_UPLOAD_BYTES: PositiveInt = 50 * 1024 * 1024
+    LIBRARY_STUDENT_LOAN_LIMIT: PositiveInt = 5
+    LIBRARY_LECTURER_LOAN_LIMIT: PositiveInt = 10
+    LIBRARY_STUDENT_LOAN_DAYS: PositiveInt = 14
+    LIBRARY_LECTURER_LOAN_DAYS: PositiveInt = 28
 
     model_config = SettingsConfigDict(
         env_file=".env",

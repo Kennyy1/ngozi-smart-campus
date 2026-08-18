@@ -46,12 +46,14 @@ from app.api.v1.endpoints import (
     public_mobile_app_router,
     announcements_router,
     notifications_router,
+    library_router,
 )
 
 
 api_router = APIRouter()
 api_router.include_router(notifications_router)
 api_router.include_router(announcements_router)
+api_router.include_router(library_router)
 api_router.include_router(public_mobile_app_router)
 api_router.include_router(mobile_app_releases_router)
 api_router.include_router(course_materials_router)

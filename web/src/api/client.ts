@@ -1,5 +1,7 @@
 const TOKEN_KEY='ngozi_access_token';
 const API_BASE_URL=(import.meta.env.VITE_API_BASE_URL as string|undefined)?.replace(/\/$/,'')??'http://127.0.0.1:8000/api/v1';
+export const apiUrl = (path: string) =>
+  `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 export const publicApiUrl=(path:string)=>/^https?:\/\//i.test(path)?path:new URL(path,API_BASE_URL).toString();
 export class ApiError extends Error {constructor(message:string,public status:number,public details?:unknown){super(message);this.name='ApiError'}}
 export const session={get:()=>sessionStorage.getItem(TOKEN_KEY),set:(token:string)=>sessionStorage.setItem(TOKEN_KEY,token),clear:()=>sessionStorage.removeItem(TOKEN_KEY)};

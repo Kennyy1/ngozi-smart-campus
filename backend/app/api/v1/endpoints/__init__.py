@@ -84,6 +84,8 @@ from app.api.v1.endpoints.course_materials import router as course_materials_rou
 from app.api.v1.endpoints.mobile_app_releases import router as mobile_app_releases_router,public_router as public_mobile_app_router
 from app.api.v1.endpoints.announcements import router as announcements_router
 from app.api.v1.endpoints.notifications import router as notifications_router
+from app.api.v1.endpoints.library import router as library_router
 
 __all__ += ["student_portal_router", "lecturer_portal_router", "admin_portal_router", "guardians_router", "guardian_student_relationships_router", "guardian_portal_router", "course_materials_router", "mobile_app_releases_router", "public_mobile_app_router"]
 __all__ += ["announcements_router", "notifications_router"]
+__all__ += ["library_router"]

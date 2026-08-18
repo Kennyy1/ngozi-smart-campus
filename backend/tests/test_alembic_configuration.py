@@ -11,6 +11,12 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 ALEMBIC_INI = BACKEND_ROOT / "alembic.ini"
 ALEMBIC_DIRECTORY = BACKEND_ROOT / "alembic"
 EXPECTED_TABLES = {
+    "authors",
+    "library_categories",
+    "library_copies",
+    "library_item_authors",
+    "library_items",
+    "library_loans",
     "announcements",
     "announcement_targets",
     "announcement_reads",

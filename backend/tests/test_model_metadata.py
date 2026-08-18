@@ -6,6 +6,12 @@ from app.db.base import Base
 
 
 EXPECTED_TABLES = {
+    "authors",
+    "library_categories",
+    "library_copies",
+    "library_item_authors",
+    "library_items",
+    "library_loans",
     "announcement_reads",
     "announcement_targets",
     "announcements",
